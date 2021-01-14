@@ -15,6 +15,7 @@ import com.rootstrap.android.util.extensions.ApiException
 import com.rootstrap.android.util.extensions.isEmail
 import com.rootstrap.android.util.extensions.isTrue
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 open class SignUpActivityViewModel(listener: ViewModelListener?) : BaseViewModel(listener) {
 
@@ -40,7 +41,8 @@ open class SignUpActivityViewModel(listener: ViewModelListener?) : BaseViewModel
     }
 
     fun isConfirmPasswordValid(password: String?, confirmedPassword: String?): Boolean {
-        return password.isNullOrEmpty().not() && confirmedPassword.isNullOrEmpty().not() && password == confirmedPassword
+        return password.isNullOrEmpty().not() && confirmedPassword.isNullOrEmpty()
+            .not() && password == confirmedPassword
     }
 
     fun isGenderValid(gender: String?): Boolean {
@@ -50,17 +52,21 @@ open class SignUpActivityViewModel(listener: ViewModelListener?) : BaseViewModel
     fun signUp(user: User) {
         networkState = NetworkState.loading
         viewModelScope.launch {
-            val result = manager.signUp(user = user)
+            try {
+                val result = manager.signUp(user = user)
 
-            if (result.isSuccess) {
-                result.getOrNull()?.value?.user?.let { user ->
-                    SessionManager.signIn(user)
+                if (result.isSuccess) {
+                    result.getOrNull()?.value?.user?.let { user ->
+                        SessionManager.signIn(user)
+                    }
+
+                    networkState = NetworkState.idle
+                    state = SignUpState.signUpSuccess
+                } else {
+                    handleError(result.exceptionOrNull())
                 }
-
-                networkState = NetworkState.idle
-                state = SignUpState.signUpSuccess
-            } else {
-                handleError(result.exceptionOrNull())
+            } catch (exception: IOException) {
+                handleError(Throwable())
             }
         }
     }
@@ -70,7 +76,6 @@ open class SignUpActivityViewModel(listener: ViewModelListener?) : BaseViewModel
             exception.message
         } else null
 
-        networkState = NetworkState.idle
         networkState = NetworkState.error
         state = SignUpState.signUpFailure
     }

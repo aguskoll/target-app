@@ -11,6 +11,8 @@ class ActionCallback {
 
     companion object {
 
+        const val FULL_ERROR_MESSAGES = "full_messages"
+
         suspend fun <T> call(apiCall: Call<T>): Result<Data<T>> =
             withContext(Dispatchers.IO) {
                 val response = apiCall.execute()
@@ -18,22 +20,39 @@ class ActionCallback {
             }
 
         private fun <T> handleResponse(response: Response<T>): Result<Data<T>> {
-            if (response.isSuccessful) {
-                return Result.success(
+            return if (response.isSuccessful) {
+                Result.success(
                     Data(response.body())
                 )
             } else {
-                try {
-                    response.errorBody()?.let {
-                        val apiError = Gson().fromJson(it.charStream(), ErrorModel::class.java)
-                        return Result.failure(
-                            ApiException(
-                                errorMessage = apiError.error
-                            )
-                        )
+                handleResponseError(response)
+            }
+        }
+
+        private fun <T> handleResponseError(response: Response<T>): Result<Data<T>> {
+            try {
+                var errorMessage = ""
+
+                response.errorBody()?.let {
+                    val apiError = Gson().fromJson(it.charStream(), ErrorModel::class.java)
+
+                    if (apiError.errors is Map<*, *> && apiError.errors[FULL_ERROR_MESSAGES] is ArrayList<*>) {
+                        val results: ArrayList<*> =
+                            apiError.errors[FULL_ERROR_MESSAGES] as ArrayList<*>
+
+                        errorMessage = if (results.isNotEmpty() && results.first() is String) {
+                            results.first() as String
+                        } else apiError.error ?: ""
                     }
-                } catch (ignore: Exception) {
+
+                    return Result.failure(
+                        ApiException(
+                            errorMessage = errorMessage
+                        )
+                    )
                 }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
             }
 
             return Result.failure(ApiException(errorType = ApiErrorType.unknownError))

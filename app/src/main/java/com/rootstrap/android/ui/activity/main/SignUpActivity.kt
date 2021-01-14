@@ -45,7 +45,12 @@ class SignUpActivity : BaseActivity(), AuthView {
     private fun checkTextInput() {
         addTextChangeListener(first_name_edit_text) { checkErrorForName() }
         addTextChangeListener(email_edit_text) { checkErrorForEmail() }
-        addTextChangeListener(password_edit_text) { checkErrorForPassword() }
+        addTextChangeListener(password_edit_text) {
+            val validPass = checkErrorForPassword()
+            if (confirm_password_edit_text.value().isNotEmpty())
+                checkErrorForConfirmPassword()
+            validPass
+        }
         addTextChangeListener(confirm_password_edit_text) { checkErrorForConfirmPassword() }
     }
 
@@ -160,10 +165,8 @@ class SignUpActivity : BaseActivity(), AuthView {
     private val viewModelListener = object : ViewModelListener {
         override fun updateState() {
             when (viewModel.state) {
-                SignUpState.signUpFailure -> showError(viewModel.error)
                 SignUpState.signUpSuccess -> showProfile()
-                else -> {
-                }
+                SignUpState.none, SignUpState.signUpFailure -> Unit
             }
         }
 
@@ -171,7 +174,10 @@ class SignUpActivity : BaseActivity(), AuthView {
             when (viewModel.networkState) {
                 NetworkState.loading -> showProgress()
                 NetworkState.idle -> hideProgress()
-                else -> showError(viewModel.error ?: getString(R.string.default_error))
+                NetworkState.error -> {
+                    hideProgress()
+                    showError(viewModel.error ?: getString(R.string.default_error))
+                }
             }
         }
     }
