@@ -147,9 +147,10 @@ class SignUpActivity : BaseActivity(), AuthView {
         if (isUserInputValid()) {
             val user = User(
                 email = email_edit_text.value(),
-                firstName = first_name_edit_text.value(),
-                lastName = confirm_password_edit_text.value(),
-                password = password_edit_text.value()
+                username = first_name_edit_text.value(),
+                passwordConfirmation = confirm_password_edit_text.value(),
+                password = password_edit_text.value(),
+                gender = gender_drop_down_text.value().toLowerCase()
             )
             viewModel.signUp(user)
         }

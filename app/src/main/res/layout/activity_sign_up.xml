@@ -60,7 +60,8 @@
                 android:id="@+id/first_name_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapWords" />
+                android:inputType="textCapWords"
+                android:gravity="center"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,7 +90,8 @@
                 android:id="@+id/email_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:gravity="center"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,9 +119,10 @@
                 android:id="@+id/password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:hint="@string/password_hint"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:gravity="center"
+                android:minEms="8"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -141,14 +144,14 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:inputType="textPassword"
             app:layout_constraintTop_toBottomOf="@id/confirm_password_hint_text">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/confirm_password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapWords" />
+                android:inputType="textPassword"
+                android:gravity="center"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -205,7 +208,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_input_text_layout_login"
             app:errorEnabled="true"
-            app:layout_constraintTop_toBottomOf="@+id/gender_hint_text">
+            app:layout_constraintTop_toBottomOf="@+id/gender_hint_text"
+            app:boxCornerRadiusTopEnd="@dimen/no_dimen"
+            app:boxCornerRadiusTopStart="@dimen/no_dimen"
+            app:boxCornerRadiusBottomStart="@dimen/no_dimen"
+            app:boxCornerRadiusBottomEnd="@dimen/no_dimen">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/gender_drop_down_text"

@@ -76,7 +76,7 @@ open class SignUpActivityViewModel(listener: ViewModelListener?) : BaseViewModel
     }
 
     companion object {
-        const val MIN_CHAR_PASSWORD = 6
+        const val MIN_CHAR_PASSWORD = 8
     }
 }
 

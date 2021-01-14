@@ -1,6 +1,6 @@
 <resources>
     <!-- General -->
-    <string name="app_name">RootstrapAndroidBase</string>
+    <string name="app_name">Target</string>
     <string name="ok">OK</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -17,7 +17,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
-    <string name="password_hint">MIN. 6 CHARACTERS LONG</string>
+    <string name="password_hint">MIN. 8 CHARACTERS LONG</string>
     <string name="got_account">Already registered? Sign in!</string>
     <string name="sign_up">Sign Up</string>
     <string name="male">MALE</string>
@@ -39,7 +39,7 @@
     <string name="select_your_gender">SELECT YOUR GENDER</string>
     <string name="error_input_no_name">you forgot to put your name!</string>
     <string name="error_invalid_email">oops! this email is not valid</string>
-    <string name="error_password_length">the password must be 6 characters long</string>
+    <string name="error_password_length">the password must be 8 characters long</string>
     <string name="error_passwords_not_match">passwords don’t match</string>
     <string name="error_forgot_select_gender">You forgot to select your gender!</string>
     <!-- Strings related to login -->
