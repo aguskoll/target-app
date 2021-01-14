@@ -52,7 +52,6 @@
             style="@style/TextInputLayoutBlackOutlinedBoxCorners"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/first_name_hint_text">
@@ -82,7 +81,6 @@
             style="@style/TextInputLayoutBlackOutlinedBoxCorners"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/email_hint_text">
@@ -111,7 +109,6 @@
             style="@style/TextInputLayoutBlackOutlinedBoxCorners"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/password_hint_text">
@@ -120,9 +117,9 @@
                 android:id="@+id/password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:hint="@string/password_hint"
-                android:inputType="textPassword"
-                android:gravity="center"/>
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -142,9 +139,9 @@
             style="@style/TextInputLayoutBlackOutlinedBoxCorners"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:inputType="textPassword"
             app:layout_constraintTop_toBottomOf="@id/confirm_password_hint_text">
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -207,18 +204,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_input_text_layout_login"
+            app:errorEnabled="true"
             app:layout_constraintTop_toBottomOf="@+id/gender_hint_text">
 
-            <AutoCompleteTextView
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/gender_drop_down_text"
+                style="@style/HintTextSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/gender_drop_down_text"
-                android:inputType="none"
                 android:gravity="center"
-                style="@style/HintTextSignIn"
-                android:textAllCaps="true"
                 android:hint="@string/select_your_gender"
-                android:textColor="@android:color/black"/>
+                android:inputType="none"
+                android:textAllCaps="true"
+                android:textColor="@android:color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

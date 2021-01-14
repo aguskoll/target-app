@@ -20,8 +20,9 @@
     <string name="password_hint">MIN. 6 CHARACTERS LONG</string>
     <string name="got_account">Already registered? Sign in!</string>
     <string name="sign_up">Sign Up</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
+    <string name="male">MALE</string>
+    <string name="female">FEMALE</string>
+    <string name="other">OTHER</string>
 
     <!-- Sign In -->
     <string name="sign_in">Sign In</string>
@@ -35,5 +36,19 @@
     <string name="text_forgot_your_password">Forgot your password?</string>
     <string name="text_connect_with_facebook">CONNECT WITH FACEBOOK</string>
     <string name="gender">Gender</string>
-    <string name="select_your_gender">Select your gender</string>
+    <string name="select_your_gender">SELECT YOUR GENDER</string>
+    <string name="error_input_no_name">you forgot to put your name!</string>
+    <string name="error_invalid_email">oops! this email is not valid</string>
+    <string name="error_password_length">the password must be 6 characters long</string>
+    <string name="error_passwords_not_match">passwords don’t match</string>
+    <string name="error_forgot_select_gender">You forgot to select your gender!</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
 </resources>
