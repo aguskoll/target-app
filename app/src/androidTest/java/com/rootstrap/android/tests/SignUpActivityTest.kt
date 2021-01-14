@@ -1,6 +1,10 @@
 package com.rootstrap.android.tests
 
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.matcher.ViewMatchers
 import com.google.gson.Gson
 import com.rootstrap.android.R
 import com.rootstrap.android.network.managers.SessionManager
@@ -35,9 +39,14 @@ class SignUpActivityTest : BaseTests() {
         setServerDispatch(signUpDispatcher())
         val testUser = testUser()
         scrollAndTypeText(R.id.first_name_edit_text, testUser.firstName)
-        scrollAndTypeText(R.id.confirm_password_edit_text, testUser.lastName)
         scrollAndTypeText(R.id.email_edit_text, testUser.email)
         scrollAndTypeText(R.id.password_edit_text, testUser.password)
+        scrollAndTypeText(R.id.confirm_password_edit_text, testUser.passwordConfirmation)
+
+        Espresso.onView(ViewMatchers.withId(R.id.gender_drop_down_text)).perform(
+            ViewActions.scrollTo(),
+            replaceText(testUser.gender))
+
         scrollAndPerformClick(R.id.sign_up_button)
         val user = SessionManager.user
         assertEquals(user, testUser)
@@ -69,6 +78,10 @@ class SignUpActivityTest : BaseTests() {
                     mockServer.notFoundResponse()
             }
         }
+    }
+
+    @Test
+    fun isUserNameValid() {
     }
 
     @After

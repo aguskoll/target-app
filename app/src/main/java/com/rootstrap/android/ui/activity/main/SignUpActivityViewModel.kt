@@ -70,7 +70,6 @@ open class SignUpActivityViewModel(listener: ViewModelListener?) : BaseViewModel
             exception.message
         } else null
 
-        networkState = NetworkState.idle
         networkState = NetworkState.error
         state = SignUpState.signUpFailure
     }

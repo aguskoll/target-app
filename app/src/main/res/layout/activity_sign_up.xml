@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_main_header"
                 android:layout_marginTop="-100dp"
-                android:src="@mipmap/background_header" />
+                android:src="@drawable/bc_header_green_yellow" />
 
             <TextView
                 android:id="@+id/title_text_view"
