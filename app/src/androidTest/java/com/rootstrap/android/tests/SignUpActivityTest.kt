@@ -35,7 +35,7 @@ class SignUpActivityTest : BaseTests() {
         setServerDispatch(signUpDispatcher())
         val testUser = testUser()
         scrollAndTypeText(R.id.first_name_edit_text, testUser.firstName)
-        scrollAndTypeText(R.id.last_name_edit_text, testUser.lastName)
+        scrollAndTypeText(R.id.confirm_password_edit_text, testUser.lastName)
         scrollAndTypeText(R.id.email_edit_text, testUser.email)
         scrollAndTypeText(R.id.password_edit_text, testUser.password)
         scrollAndPerformClick(R.id.sign_up_button)

@@ -30,6 +30,7 @@ class SignInActivity : PermissionActivity(), AuthView {
             .get(SignInActivityViewModel::class.java)
 
         sign_in_button.setOnClickListener { signIn() }
+        sign_up_text_view.setOnClickListener { goToSignUp() }
 
         lifecycle.addObserver(viewModel)
 
@@ -38,6 +39,10 @@ class SignInActivity : PermissionActivity(), AuthView {
 
     override fun showProfile() {
         startActivityClearTask(ProfileActivity())
+    }
+
+    private fun goToSignUp() {
+        startActivity(SignUpActivity())
     }
 
     private fun signIn() {

@@ -2,6 +2,7 @@ package com.rootstrap.android.ui.activity.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProviders
 import com.rootstrap.android.R
 import com.rootstrap.android.metrics.Analytics
@@ -29,7 +30,15 @@ class SignUpActivity : BaseActivity(), AuthView {
             .get(SignUpActivityViewModel::class.java)
 
         sign_up_button.setOnClickListener { signUp() }
-        sign_in_text_view.setOnClickListener { startActivity(Intent(this, SignInActivity::class.java)) }
+        sign_in_text_view.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    SignInActivity::class.java
+                )
+            )
+        }
+        initGenderDropDown()
 
         lifecycle.addObserver(viewModel)
     }
@@ -38,11 +47,17 @@ class SignUpActivity : BaseActivity(), AuthView {
         startActivityClearTask(ProfileActivity())
     }
 
+    private fun initGenderDropDown() {
+        val items = listOf(getString(R.string.female), getString(R.string.male))
+        val adapter = ArrayAdapter(this, R.layout.gender_list_item, items)
+        (gender_drop_down_text)?.setAdapter(adapter)
+    }
+
     private fun signUp() {
         val user = User(
             email = email_edit_text.value(),
             firstName = first_name_edit_text.value(),
-            lastName = last_name_edit_text.value(),
+            lastName = confirm_password_edit_text.value(),
             password = password_edit_text.value()
         )
         viewModel.signUp(user)

@@ -12,12 +12,16 @@
     <string name="error">ERROR</string>
 
     <!-- Sign Up -->
-    <string name="first_name">First Name</string>
+    <string name="first_name">Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="password_hint">MIN. 6 CHARACTERS LONG</string>
     <string name="got_account">Already registered? Sign in!</string>
     <string name="sign_up">Sign Up</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 
     <!-- Sign In -->
     <string name="sign_in">Sign In</string>
@@ -26,4 +30,10 @@
     <string name="welcome_message">Hi %1$s!</string>
     <string name="sign_out">Sign Out</string>
     <string name="default_error">Oops! Network error</string>
+    <string name="text_title_target_mvd">TARGET MVD</string>
+    <string name="sign_up_text">SIGN UP</string>
+    <string name="text_forgot_your_password">Forgot your password?</string>
+    <string name="text_connect_with_facebook">CONNECT WITH FACEBOOK</string>
+    <string name="gender">Gender</string>
+    <string name="select_your_gender">Select your gender</string>
 </resources>
