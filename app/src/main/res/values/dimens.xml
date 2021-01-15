@@ -19,6 +19,8 @@
     <dimen name="margin_small_10">10dp</dimen>
     <dimen name="margin_normal_20">20dp</dimen>
     <dimen name="margin_normal_30">30dp</dimen>
+    <dimen name="margin_negative_50">-50dp</dimen>
+    <dimen name="margin_negative_100">-100dp</dimen>
     <dimen name="height_main_header">300dp</dimen>
     <dimen name="margin_input_text_layout_login">60dp</dimen>
     <dimen name="margin_normal_16">16dp</dimen>

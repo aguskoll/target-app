@@ -1,6 +1,7 @@
 package com.rootstrap.android.ui.activity.main
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.rootstrap.android.R
@@ -42,7 +43,7 @@ class SignInActivity : PermissionActivity(), AuthView {
     }
 
     private fun goToSignUp() {
-        startActivity(SignUpActivity())
+        startActivity(Intent(this, SignUpActivity::class.java))
     }
 
     private fun signIn() {

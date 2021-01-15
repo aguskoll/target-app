@@ -51,9 +51,4 @@ open class BaseActivity : AppCompatActivity(), BaseView {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
     }
-
-    protected fun startActivity(activity: Activity) {
-        val intent = Intent(this, activity.javaClass)
-        startActivity(intent)
-    }
 }

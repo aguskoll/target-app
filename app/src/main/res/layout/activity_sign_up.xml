@@ -20,19 +20,14 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_main_header"
-                android:layout_marginTop="-100dp"
+                android:layout_marginTop="@dimen/margin_negative_100"
                 android:src="@drawable/bc_header_green_yellow" />
 
             <TextView
                 android:id="@+id/title_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/sign_up_margin_horizontal"
-                android:gravity="center"
-                android:text="@string/text_title_target_mvd"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/text_size_20"
-                android:textStyle="bold"
+                style="@style/TextHeaderLoginTitle"
                 app:layout_constraintTop_toTopOf="parent" />
         </FrameLayout>
 
@@ -41,7 +36,6 @@
             style="@style/HintTextSignIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-30dp"
             android:text="@string/first_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,8 +115,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password_hint"
                 android:inputType="textPassword"
-                android:gravity="center"
-                android:minEms="8"/>
+                android:gravity="center" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

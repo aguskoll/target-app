@@ -80,10 +80,6 @@ class SignUpActivityTest : BaseTests() {
         }
     }
 
-    @Test
-    fun isUserNameValid() {
-    }
-
     @After
     override fun after() {
         super.after()
