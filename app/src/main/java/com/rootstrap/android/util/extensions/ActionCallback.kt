@@ -36,13 +36,15 @@ class ActionCallback {
                 response.errorBody()?.let {
                     val apiError = Gson().fromJson(it.charStream(), ErrorModel::class.java)
 
-                    if (apiError.errors is Map<*, *> && apiError.errors[FULL_ERROR_MESSAGES] is ArrayList<*>) {
+                    errorMessage = if (apiError.errors is Map<*, *> && apiError.errors[FULL_ERROR_MESSAGES] is ArrayList<*>) {
                         val results: ArrayList<*> =
                             apiError.errors[FULL_ERROR_MESSAGES] as ArrayList<*>
 
-                        errorMessage = if (results.isNotEmpty() && results.first() is String) {
+                        if (results.isNotEmpty() && results.first() is String) {
                             results.first() as String
                         } else apiError.error ?: ""
+                    } else {
+                        apiError.error ?: ""
                     }
 
                     return Result.failure(

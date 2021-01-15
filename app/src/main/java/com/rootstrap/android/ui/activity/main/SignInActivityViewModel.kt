@@ -13,6 +13,7 @@ import com.rootstrap.android.util.ViewModelListener
 import com.rootstrap.android.util.extensions.ApiErrorType
 import com.rootstrap.android.util.extensions.ApiException
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 open class SignInActivityViewModel(listener: ViewModelListener?) : BaseViewModel(listener) {
 
@@ -24,19 +25,27 @@ open class SignInActivityViewModel(listener: ViewModelListener?) : BaseViewModel
             listener?.updateState()
         }
 
+    fun canSignIn(userName: String?, password: String?): Boolean {
+        return userName.isNullOrEmpty().not() && password.isNullOrEmpty().not()
+    }
+
     fun signIn(user: User) {
         networkState = NetworkState.loading
         viewModelScope.launch {
-            val result = manager.signIn(user = user)
-            if (result.isSuccess) {
-                result.getOrNull()?.value?.user?.let { user ->
-                    SessionManager.signIn(user)
-                }
+            try {
+                val result = manager.signIn(user = user)
+                if (result.isSuccess) {
+                    result.getOrNull()?.value?.user?.let { user ->
+                        SessionManager.signIn(user)
+                    }
 
-                networkState = NetworkState.idle
-                state = SignInState.signInSuccess
-            } else {
-                handleError(result.exceptionOrNull())
+                    networkState = NetworkState.idle
+                    state = SignInState.signInSuccess
+                } else {
+                    handleError(result.exceptionOrNull())
+                }
+            } catch (exception: IOException) {
+                handleError(Throwable())
             }
         }
     }
