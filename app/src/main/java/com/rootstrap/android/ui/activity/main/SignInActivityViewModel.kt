@@ -7,6 +7,7 @@ import com.rootstrap.android.network.managers.IUserManager
 import com.rootstrap.android.network.managers.SessionManager
 import com.rootstrap.android.network.managers.UserManager
 import com.rootstrap.android.network.models.User
+import com.rootstrap.android.ui.activity.main.SignUpActivityViewModel.Companion.MIN_CHAR_PASSWORD
 import com.rootstrap.android.ui.base.BaseViewModel
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.ViewModelListener
@@ -15,9 +16,10 @@ import com.rootstrap.android.util.extensions.ApiException
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-open class SignInActivityViewModel(listener: ViewModelListener?) : BaseViewModel(listener) {
-
-    private val manager: IUserManager = UserManager
+open class SignInActivityViewModel(
+    listener: ViewModelListener?,
+    private var manager: IUserManager
+) : BaseViewModel(listener) {
 
     var state: SignInState = SignInState.none
         set(value) {
@@ -26,7 +28,10 @@ open class SignInActivityViewModel(listener: ViewModelListener?) : BaseViewModel
         }
 
     fun canSignIn(userName: String?, password: String?): Boolean {
-        return userName.isNullOrEmpty().not() && password.isNullOrEmpty().not()
+        return userName.isNullOrEmpty().not() &&
+                password != null &&
+                password.isNotEmpty() &&
+                password.length >= MIN_CHAR_PASSWORD
     }
 
     fun signIn(user: User) {
@@ -69,6 +74,6 @@ enum class SignInState {
 
 class SignInActivityViewModelFactory(var listener: ViewModelListener?) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return SignInActivityViewModel(listener) as T
+        return SignInActivityViewModel(listener, UserManager) as T
     }
 }

@@ -1,21 +1,19 @@
 package com.rootstrap.android.ui.activity.main
 
-import com.rootstrap.android.network.models.User
-import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.ViewModelListener
+import com.rootstrap.android.utils.BaseTests
 import junit.framework.Assert
-import junit.framework.TestCase
-import kotlinx.coroutines.runBlocking
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
-import org.mockito.MockitoAnnotations
 
-class SignUpActivityViewModelTest : TestCase() {
+class SignUpActivityViewModelTest : BaseTests() {
 
     lateinit var signUpActivityViewModel: SignUpActivityViewModel
 
-    public override fun setUp() {
-        super.setUp()
-        MockitoAnnotations.initMocks(this)
+    @Before
+    fun setUp() {
+        super.before()
         signUpActivityViewModel = SignUpActivityViewModel(object : ViewModelListener {
             override fun updateState() {}
 
@@ -86,7 +84,12 @@ class SignUpActivityViewModelTest : TestCase() {
 
     @Test
     fun testIsConfirmPasswordNotValid() {
-        assert(signUpActivityViewModel.isConfirmPasswordValid(VALID_PASSWORD, INVALID_PASSWORD))
+        Assert.assertFalse(
+            signUpActivityViewModel.isConfirmPasswordValid(
+                VALID_PASSWORD,
+                INVALID_PASSWORD
+            )
+        )
     }
 
     @Test
@@ -104,32 +107,9 @@ class SignUpActivityViewModelTest : TestCase() {
         Assert.assertFalse(signUpActivityViewModel.isGenderValid(INVALID_GENDER))
     }
 
-    @Test
-    fun testSignUp() {
-        val user = User(
-            email = VALID_MAIL,
-            username = VALID_NAME,
-            passwordConfirmation = VALID_CONFIRM_PASSWORD,
-            password = VALID_PASSWORD,
-            gender = VALID_GENDER
-        )
-        runBlocking { signUpActivityViewModel.signUp(user) }
-        assert(signUpActivityViewModel.networkState == NetworkState.idle)
-        assert(signUpActivityViewModel.state == SignUpState.signUpSuccess)
-    }
-
-    @Test
-    fun testSignUpWhenFail() {
-        val user = User(
-            email = INVALID_MAIL,
-            username = VALID_NAME,
-            passwordConfirmation = VALID_CONFIRM_PASSWORD,
-            password = VALID_PASSWORD,
-            gender = VALID_GENDER
-        )
-        runBlocking { signUpActivityViewModel.signUp(user) }
-        assert(signUpActivityViewModel.networkState == NetworkState.error)
-        assert(signUpActivityViewModel.state == SignUpState.signUpFailure)
+    @After
+    override fun after() {
+        super.after()
     }
 
     companion object {

@@ -1,6 +1,5 @@
 package com.rootstrap.android.ui.activity.main
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +14,6 @@ import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.ViewModelListener
 import com.rootstrap.android.util.extensions.value
 import com.rootstrap.android.util.permissions.PermissionActivity
-import com.rootstrap.android.util.permissions.PermissionResponse
 
 class SignInActivity : PermissionActivity(), AuthView {
 
@@ -39,8 +37,6 @@ class SignInActivity : PermissionActivity(), AuthView {
         binding.signUpTextView.setOnClickListener { goToSignUp() }
 
         lifecycle.addObserver(viewModel)
-
-        sampleAskForPermission()
     }
 
     override fun showProfile() {
@@ -91,15 +87,5 @@ class SignInActivity : PermissionActivity(), AuthView {
                 }
             }
         }
-    }
-
-    private fun sampleAskForPermission() {
-        requestPermission(arrayOf(Manifest.permission.CAMERA), object : PermissionResponse {
-            override fun granted() = Unit
-
-            override fun denied() = Unit
-
-            override fun foreverDenied() = Unit
-        })
     }
 }
