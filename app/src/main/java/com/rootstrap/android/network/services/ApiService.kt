@@ -8,7 +8,7 @@ import retrofit2.http.POST
 
 interface ApiService {
 
-    @POST("users/")
+    @POST("users")
     fun signUp(@Body user: UserSerializer): Call<UserSerializer>
 
     @POST("users/sign_in")

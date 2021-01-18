@@ -15,3 +15,7 @@ fun String.isEmail(): Boolean {
                 ")+"
     )
 }
+
+fun Boolean?.isTrue(): Boolean {
+    return this == true
+}

@@ -44,7 +44,8 @@ open class BaseTests {
         "Richard",
         "99090909",
         "asdasdasdasda",
-        "Richard"
+        passwordConfirmation = "asdasdasdasda",
+        gender = "other"
     )
 
     open fun scrollAndTypeText(id: Int, text: String) {

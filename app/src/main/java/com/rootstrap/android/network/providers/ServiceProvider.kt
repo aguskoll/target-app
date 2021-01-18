@@ -11,7 +11,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object ServiceProvider {
 
-    private var URL_API: String? = null
+    private var URL_API: String = "https://target-mvd-api.herokuapp.com/api/v1"
 
     private fun build(): Retrofit {
         val client = OkHttpClient.Builder()
@@ -29,7 +29,7 @@ object ServiceProvider {
     }
 
     fun <T> create(klass: Class<T>, url: String? = BuildConfig.API_URL): T {
-        URL_API = url
+        URL_API = url ?: ""
         return build().create(klass)
     }
 }

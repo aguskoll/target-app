@@ -1,6 +1,7 @@
 package com.rootstrap.android.ui.activity.main
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.rootstrap.android.R
@@ -30,6 +31,7 @@ class SignInActivity : PermissionActivity(), AuthView {
             .get(SignInActivityViewModel::class.java)
 
         sign_in_button.setOnClickListener { signIn() }
+        sign_up_text_view.setOnClickListener { goToSignUp() }
 
         lifecycle.addObserver(viewModel)
 
@@ -38,6 +40,10 @@ class SignInActivity : PermissionActivity(), AuthView {
 
     override fun showProfile() {
         startActivityClearTask(ProfileActivity())
+    }
+
+    private fun goToSignUp() {
+        startActivity(Intent(this, SignUpActivity::class.java))
     }
 
     private fun signIn() {

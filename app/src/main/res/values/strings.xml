@@ -1,6 +1,6 @@
 <resources>
     <!-- General -->
-    <string name="app_name">RootstrapAndroidBase</string>
+    <string name="app_name">Target</string>
     <string name="ok">OK</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -12,12 +12,17 @@
     <string name="error">ERROR</string>
 
     <!-- Sign Up -->
-    <string name="first_name">First Name</string>
+    <string name="first_name">Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="password_hint">MIN. 8 CHARACTERS LONG</string>
     <string name="got_account">Already registered? Sign in!</string>
     <string name="sign_up">Sign Up</string>
+    <string name="male">MALE</string>
+    <string name="female">FEMALE</string>
+    <string name="other">OTHER</string>
 
     <!-- Sign In -->
     <string name="sign_in">Sign In</string>
@@ -26,4 +31,24 @@
     <string name="welcome_message">Hi %1$s!</string>
     <string name="sign_out">Sign Out</string>
     <string name="default_error">Oops! Network error</string>
+    <string name="text_title_target_mvd">TARGET MVD</string>
+    <string name="sign_up_text">SIGN UP</string>
+    <string name="text_forgot_your_password">Forgot your password?</string>
+    <string name="text_connect_with_facebook">CONNECT WITH FACEBOOK</string>
+    <string name="gender">Gender</string>
+    <string name="select_your_gender">SELECT YOUR GENDER</string>
+    <string name="error_input_no_name">you forgot to put your name!</string>
+    <string name="error_invalid_email">oops! this email is not valid</string>
+    <string name="error_password_length">the password must be 8 characters long</string>
+    <string name="error_passwords_not_match">passwords don’t match</string>
+    <string name="error_forgot_select_gender">You forgot to select your gender!</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
 </resources>
