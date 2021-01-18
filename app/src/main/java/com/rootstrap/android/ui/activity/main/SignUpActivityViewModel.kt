@@ -41,8 +41,8 @@ open class SignUpActivityViewModel(listener: ViewModelListener?) : BaseViewModel
     }
 
     fun isConfirmPasswordValid(password: String?, confirmedPassword: String?): Boolean {
-        return password.isNullOrEmpty().not() && confirmedPassword.isNullOrEmpty()
-            .not() && password == confirmedPassword
+        return password.isNullOrEmpty().not() && confirmedPassword.isNullOrEmpty().not() &&
+                password == confirmedPassword
     }
 
     fun isGenderValid(gender: String?): Boolean {

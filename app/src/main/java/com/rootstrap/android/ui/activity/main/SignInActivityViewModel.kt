@@ -15,9 +15,10 @@ import com.rootstrap.android.util.extensions.ApiException
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-open class SignInActivityViewModel(listener: ViewModelListener?) : BaseViewModel(listener) {
-
-    private val manager: IUserManager = UserManager
+open class SignInActivityViewModel(
+    listener: ViewModelListener?,
+    private var manager: IUserManager
+) : BaseViewModel(listener) {
 
     var state: SignInState = SignInState.none
         set(value) {
@@ -69,6 +70,6 @@ enum class SignInState {
 
 class SignInActivityViewModelFactory(var listener: ViewModelListener?) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return SignInActivityViewModel(listener) as T
+        return SignInActivityViewModel(listener, UserManager) as T
     }
 }
