@@ -51,6 +51,7 @@ open class SignInActivityViewModel(
 
     fun signInWithFacebook(token: String) {
         networkState = NetworkState.loading
+        SessionManager.addFacebookToken(token)
         viewModelScope.launch {
             try {
                 val result = manager.signInWithFacebook(FacebookSignIn(token))

@@ -32,6 +32,10 @@ object SessionManager {
         return (user != null && prefs.signedIn)
     }
 
+    fun addFacebookToken(token: String) {
+        prefs.facebookAccessToken = token
+    }
+
     fun isUserSignedInFacebook(): Boolean {
         return user != null && prefs.facebookAccessToken.isNullOrEmpty().not()
     }
