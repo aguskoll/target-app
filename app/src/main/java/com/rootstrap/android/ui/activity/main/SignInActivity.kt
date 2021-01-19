@@ -1,9 +1,7 @@
 package com.rootstrap.android.ui.activity.main
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -22,7 +20,6 @@ import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.ViewModelListener
 import com.rootstrap.android.util.extensions.value
 import com.rootstrap.android.util.permissions.PermissionActivity
-import com.rootstrap.android.util.permissions.PermissionResponse
 
 class SignInActivity : PermissionActivity(), AuthView {
 
@@ -66,13 +63,13 @@ class SignInActivity : PermissionActivity(), AuthView {
         LoginManager.getInstance().registerCallback(
             faceBookCallbackManager,
             object : FacebookCallback<LoginResult> {
-                override fun onSuccess(result: LoginResult?) {
-                    Log.d("facebook", "onSuccess")
-                }
+                override fun onSuccess(result: LoginResult?) = Unit
 
                 override fun onCancel() = Unit
 
-                override fun onError(error: FacebookException?) = Unit
+                override fun onError(error: FacebookException?) {
+                    showError(null)
+                }
             })
     }
 
@@ -84,7 +81,9 @@ class SignInActivity : PermissionActivity(), AuthView {
         faceBookCallbackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
         val accessToken = AccessToken.getCurrentAccessToken()
-        viewModel.signInWithFacebook(accessToken.token)
+        accessToken?.token?.run {
+            viewModel.signInWithFacebook(this)
+        }
     }
 
     private fun goToSignUp() {
@@ -132,17 +131,6 @@ class SignInActivity : PermissionActivity(), AuthView {
             }
         }
     }
-
-    private fun sampleAskForPermission() {
-        requestPermission(arrayOf(Manifest.permission.CAMERA), object : PermissionResponse {
-            override fun granted() = Unit
-
-            override fun denied() = Unit
-
-            override fun foreverDenied() = Unit
-        })
-    }
-
     companion object {
         const val FACEBOOK_PERMISSION = "public_profile"
     }

@@ -8,11 +8,14 @@ import com.rootstrap.android.network.managers.SessionManager
 import com.rootstrap.android.network.managers.UserManager
 import com.rootstrap.android.network.models.FacebookSignIn
 import com.rootstrap.android.network.models.User
+import com.rootstrap.android.network.models.UserSerializer
+import com.rootstrap.android.ui.activity.main.SignUpActivityViewModel.Companion.MIN_CHAR_PASSWORD
 import com.rootstrap.android.ui.base.BaseViewModel
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.ViewModelListener
 import com.rootstrap.android.util.extensions.ApiErrorType
 import com.rootstrap.android.util.extensions.ApiException
+import com.rootstrap.android.util.extensions.Data
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -28,7 +31,10 @@ open class SignInActivityViewModel(
         }
 
     fun canSignIn(userName: String?, password: String?): Boolean {
-        return userName.isNullOrEmpty().not() && password.isNullOrEmpty().not()
+        return userName.isNullOrEmpty().not() &&
+                password != null &&
+                password.isNotEmpty() &&
+                password.length >= MIN_CHAR_PASSWORD
     }
 
     fun signIn(user: User) {
@@ -36,16 +42,7 @@ open class SignInActivityViewModel(
         viewModelScope.launch {
             try {
                 val result = manager.signIn(user = user)
-                if (result.isSuccess) {
-                    result.getOrNull()?.value?.user?.let { user ->
-                        SessionManager.signIn(user)
-                    }
-
-                    networkState = NetworkState.idle
-                    state = SignInState.signInSuccess
-                } else {
-                    handleError(result.exceptionOrNull())
-                }
+                signInResult(result)
             } catch (exception: IOException) {
                 handleError(Throwable())
             }
@@ -57,19 +54,22 @@ open class SignInActivityViewModel(
         viewModelScope.launch {
             try {
                 val result = manager.signInWithFacebook(FacebookSignIn(token))
-                if (result.isSuccess) {
-                    result.getOrNull()?.value?.user?.let { user ->
-                        SessionManager.signIn(user)
-                    }
-
-                    networkState = NetworkState.idle
-                    state = SignInState.signInSuccess
-                } else {
-                    handleError(result.exceptionOrNull())
-                }
+                signInResult(result)
             } catch (exception: IOException) {
                 handleError(Throwable())
             }
+        }
+    }
+
+    private fun signInResult(result: Result<Data<UserSerializer>>) {
+        if (result.isSuccess) {
+            result.getOrNull()?.value?.user?.let { user ->
+                SessionManager.signIn(user)
+            }
+            networkState = NetworkState.idle
+            state = SignInState.signInSuccess
+        } else {
+            handleError(result.exceptionOrNull())
         }
     }
 
