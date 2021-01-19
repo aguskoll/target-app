@@ -1,6 +1,7 @@
 package com.rootstrap.android.network.managers
 
 import androidx.annotation.RestrictTo
+import com.rootstrap.android.network.models.FacebookSignIn
 import com.rootstrap.android.network.models.User
 import com.rootstrap.android.network.models.UserSerializer
 import com.rootstrap.android.network.providers.ServiceProvider
@@ -20,6 +21,9 @@ object UserManager : IUserManager {
 
     override suspend fun signIn(user: User): Result<Data<UserSerializer>> =
         ActionCallback.call(service.signIn(UserSerializer(user)))
+
+    override suspend fun signInWithFacebook(signIn: FacebookSignIn): Result<Data<UserSerializer>> =
+        ActionCallback.call(service.signInWithFacebook(signIn))
 
     override suspend fun signOut(): Result<Data<Void>> =
         ActionCallback.call(service.signOut())

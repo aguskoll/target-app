@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.rootstrap.android.network.managers.IUserManager
 import com.rootstrap.android.network.managers.SessionManager
 import com.rootstrap.android.network.managers.UserManager
+import com.rootstrap.android.network.models.FacebookSignIn
 import com.rootstrap.android.network.models.User
 import com.rootstrap.android.ui.base.BaseViewModel
 import com.rootstrap.android.util.NetworkState
@@ -35,6 +36,27 @@ open class SignInActivityViewModel(
         viewModelScope.launch {
             try {
                 val result = manager.signIn(user = user)
+                if (result.isSuccess) {
+                    result.getOrNull()?.value?.user?.let { user ->
+                        SessionManager.signIn(user)
+                    }
+
+                    networkState = NetworkState.idle
+                    state = SignInState.signInSuccess
+                } else {
+                    handleError(result.exceptionOrNull())
+                }
+            } catch (exception: IOException) {
+                handleError(Throwable())
+            }
+        }
+    }
+
+    fun signInWithFacebook(token: String) {
+        networkState = NetworkState.loading
+        viewModelScope.launch {
+            try {
+                val result = manager.signInWithFacebook(FacebookSignIn(token))
                 if (result.isSuccess) {
                     result.getOrNull()?.value?.user?.let { user ->
                         SessionManager.signIn(user)
