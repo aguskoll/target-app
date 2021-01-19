@@ -31,4 +31,8 @@ object SessionManager {
     fun isUserSignedIn(): Boolean {
         return (user != null && prefs.signedIn)
     }
+
+    fun isUserSignedInFacebook(): Boolean {
+        return user != null && prefs.facebookAccessToken.isNullOrEmpty().not()
+    }
 }

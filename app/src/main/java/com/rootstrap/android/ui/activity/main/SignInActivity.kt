@@ -42,11 +42,16 @@ class SignInActivity : PermissionActivity(), AuthView {
             .get(SignInActivityViewModel::class.java)
 
         logInCallbackFacebook()
+
+        initView()
+
+        lifecycle.addObserver(viewModel)
+    }
+
+    private fun initView() {
         binding.signInButton.setOnClickListener { signIn() }
         binding.signUpTextView.setOnClickListener { goToSignUp() }
         binding.connectWithFacebookTextView.setOnClickListener { logInFacebook() }
-
-        lifecycle.addObserver(viewModel)
     }
 
     override fun showProfile() {
@@ -58,7 +63,6 @@ class SignInActivity : PermissionActivity(), AuthView {
     }
 
     private fun logInCallbackFacebook() {
-
         faceBookCallbackManager = CallbackManager.Factory.create()
         LoginManager.getInstance().registerCallback(
             faceBookCallbackManager,
@@ -131,6 +135,7 @@ class SignInActivity : PermissionActivity(), AuthView {
             }
         }
     }
+
     companion object {
         const val FACEBOOK_PERMISSION = "public_profile"
     }

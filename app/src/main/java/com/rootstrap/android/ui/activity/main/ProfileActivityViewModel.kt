@@ -3,6 +3,7 @@ package com.rootstrap.android.ui.activity.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.facebook.login.LoginManager
 import com.rootstrap.android.network.managers.IUserManager
 import com.rootstrap.android.network.managers.SessionManager
 import com.rootstrap.android.network.managers.UserManager
@@ -24,10 +25,17 @@ open class ProfileActivityViewModel(listener: ViewModelListener?) : BaseViewMode
             if (result.isSuccess) {
                 networkState = NetworkState.idle
                 state = ProfileState.signOutSuccess
+                signOutFromFacebook()
                 SessionManager.signOut()
             } else {
                 handleError(result.exceptionOrNull())
             }
+        }
+    }
+
+    private fun signOutFromFacebook() {
+        if (SessionManager.isUserSignedInFacebook()) {
+            LoginManager.getInstance().logOut()
         }
     }
 
