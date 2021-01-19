@@ -51,14 +51,14 @@ class SignInActivity : PermissionActivity(), AuthView {
     private fun initView() {
         binding.signInButton.setOnClickListener { signIn() }
         binding.signUpTextView.setOnClickListener { goToSignUp() }
-        binding.connectWithFacebookTextView.setOnClickListener { logInFacebook() }
+        binding.connectWithFacebookTextView.setOnClickListener { logInWithFacebook() }
     }
 
     override fun showProfile() {
         startActivityClearTask(ProfileActivity())
     }
 
-    private fun logInFacebook() {
+    private fun logInWithFacebook() {
         LoginManager.getInstance().logIn(this, arrayListOf(FACEBOOK_PERMISSION))
     }
 
@@ -114,11 +114,10 @@ class SignInActivity : PermissionActivity(), AuthView {
         binding.emailTextInputLayout.error = " "
     }
 
-    // ViewModelListener
     private val viewModelListener = object : ViewModelListener {
         override fun updateState() {
             when (viewModel.state) {
-                SignInState.signInFailure, SignInState.none -> showLoginError()
+                SignInState.signInFailure, SignInState.none -> Unit
                 SignInState.signInSuccess -> showProfile()
             }
         }
@@ -127,10 +126,11 @@ class SignInActivity : PermissionActivity(), AuthView {
             when (viewModel.networkState) {
                 NetworkState.loading -> showProgress()
                 NetworkState.idle -> hideProgress()
-                else -> {
+                NetworkState.error -> {
                     hideProgress()
                     if (viewModel.error.isNullOrEmpty())
                         showError(getString(R.string.default_error))
+                    else showLoginError()
                 }
             }
         }
