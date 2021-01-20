@@ -5,10 +5,47 @@
     android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.main.MapActivity" >
+    tools:context=".ui.activity.main.MapActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:background="@android:color/white"
+        android:paddingTop="@dimen/margin_normal_30"
+        android:paddingBottom="@dimen/margin_small_10"
+        map:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/target_points"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_14" />
+
+        <TextView
+            android:id="@+id/go_to_profile_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="@dimen/margin_small_10"
+            map:drawableStartCompat="@drawable/ic_profile" />
+
+        <TextView
+            android:id="@+id/go_to_chat_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/margin_small_10"
+            map:drawableStartCompat="@drawable/ic_chat" />
+    </FrameLayout>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        map:layout_constraintTop_toBottomOf="@+id/toolbar"
+        map:layout_constraintBottom_toBottomOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

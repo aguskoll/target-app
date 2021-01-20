@@ -1,15 +1,32 @@
 package com.rootstrap.android.ui.activity.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.rootstrap.android.R
+import com.rootstrap.android.databinding.ActivityMapBinding
 
 class MapActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMapBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
+        binding = ActivityMapBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
+    }
+
+    private fun initView() {
         initMapFragment()
+        binding.goToProfileBtn.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    ProfileActivity::class.java
+                )
+            )
+        }
     }
 
     private fun initMapFragment() {

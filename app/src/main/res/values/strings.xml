@@ -55,4 +55,5 @@
     <string name="facebook_app_id">166925907359293</string>
     <string name="fb_login_protocol_scheme">fb166925907359293</string>
     <string name="title_activity_map">Map</string>
+    <string name="target_points">Target Points</string>
 </resources>
