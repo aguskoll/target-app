@@ -54,8 +54,8 @@ class SignInActivity : PermissionActivity(), AuthView {
         binding.connectWithFacebookTextView.setOnClickListener { logInWithFacebook() }
     }
 
-    override fun showProfile() {
-        startActivityClearTask(ProfileActivity())
+    override fun showMainPage() {
+        startActivityClearTask(MapActivity())
     }
 
     private fun logInWithFacebook() {
@@ -118,7 +118,7 @@ class SignInActivity : PermissionActivity(), AuthView {
         override fun updateState() {
             when (viewModel.state) {
                 SignInState.signInFailure, SignInState.none -> Unit
-                SignInState.signInSuccess -> showProfile()
+                SignInState.signInSuccess -> showMainPage()
             }
         }
 

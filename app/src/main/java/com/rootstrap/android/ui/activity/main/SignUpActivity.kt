@@ -122,8 +122,8 @@ class SignUpActivity : BaseActivity(), AuthView {
         )
     }
 
-    override fun showProfile() {
-        startActivityClearTask(ProfileActivity())
+    override fun showMainPage() {
+        startActivityClearTask(MapActivity())
     }
 
     private fun initGenderDropDown() {
@@ -165,7 +165,7 @@ class SignUpActivity : BaseActivity(), AuthView {
     private val viewModelListener = object : ViewModelListener {
         override fun updateState() {
             when (viewModel.state) {
-                SignUpState.signUpSuccess -> showProfile()
+                SignUpState.signUpSuccess -> showMainPage()
                 SignUpState.none, SignUpState.signUpFailure -> Unit
             }
         }
