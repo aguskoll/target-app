@@ -1,7 +1,7 @@
 package com.rootstrap.android.ui.activity.main
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.rootstrap.android.R
 import com.rootstrap.android.metrics.Analytics
 import com.rootstrap.android.metrics.PageEvents
@@ -22,19 +22,19 @@ class ProfileActivity : BaseActivity(), ProfileView {
         setContentView(R.layout.activity_profile)
 
         val factory = ProfileActivityViewModelFactory(viewModelListener)
-        viewModel = ViewModelProviders.of(this, factory)
+        viewModel = ViewModelProvider(this, factory)
             .get(ProfileActivityViewModel::class.java)
 
         Analytics.track(PageEvents.visit(VISIT_PROFILE))
 
-        welcome_text_view.text = getString(R.string.welcome_message, SessionManager.user?.firstName)
+        welcome_text_view.text = getString(R.string.welcome_message, SessionManager.user?.firstName ?: "")
         sign_out_button.setOnClickListener { viewModel.signOut() }
 
         lifecycle.addObserver(viewModel)
     }
 
     override fun goToFirstScreen() {
-        startActivityClearTask(SignUpActivity())
+        startActivityClearTask(SignInActivity())
     }
 
     // ViewModelListener

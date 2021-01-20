@@ -3,6 +3,12 @@ package com.rootstrap.android.ui.activity.main
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.ActivitySignInBinding
 import com.rootstrap.android.metrics.Analytics
@@ -21,6 +27,8 @@ class SignInActivity : PermissionActivity(), AuthView {
 
     private lateinit var binding: ActivitySignInBinding
 
+    private lateinit var faceBookCallbackManager: CallbackManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
@@ -33,14 +41,53 @@ class SignInActivity : PermissionActivity(), AuthView {
         viewModel = ViewModelProvider(this, factory)
             .get(SignInActivityViewModel::class.java)
 
-        binding.signInButton.setOnClickListener { signIn() }
-        binding.signUpTextView.setOnClickListener { goToSignUp() }
+        logInCallbackFacebook()
+
+        initView()
 
         lifecycle.addObserver(viewModel)
     }
 
+    private fun initView() {
+        binding.signInButton.setOnClickListener { signIn() }
+        binding.signUpTextView.setOnClickListener { goToSignUp() }
+        binding.connectWithFacebookTextView.setOnClickListener { logInWithFacebook() }
+    }
+
     override fun showProfile() {
         startActivityClearTask(ProfileActivity())
+    }
+
+    private fun logInWithFacebook() {
+        LoginManager.getInstance().logIn(this, arrayListOf(FACEBOOK_PERMISSION))
+    }
+
+    private fun logInCallbackFacebook() {
+        faceBookCallbackManager = CallbackManager.Factory.create()
+        LoginManager.getInstance().registerCallback(
+            faceBookCallbackManager,
+            object : FacebookCallback<LoginResult> {
+                override fun onSuccess(result: LoginResult?) = Unit
+
+                override fun onCancel() = Unit
+
+                override fun onError(error: FacebookException?) {
+                    showError(null)
+                }
+            })
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        faceBookCallbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+        val accessToken = AccessToken.getCurrentAccessToken()
+        accessToken?.token?.run {
+            viewModel.signInWithFacebook(this)
+        }
     }
 
     private fun goToSignUp() {
@@ -67,11 +114,10 @@ class SignInActivity : PermissionActivity(), AuthView {
         binding.emailTextInputLayout.error = " "
     }
 
-    // ViewModelListener
     private val viewModelListener = object : ViewModelListener {
         override fun updateState() {
             when (viewModel.state) {
-                SignInState.signInFailure, SignInState.none -> showLoginError()
+                SignInState.signInFailure, SignInState.none -> Unit
                 SignInState.signInSuccess -> showProfile()
             }
         }
@@ -80,12 +126,17 @@ class SignInActivity : PermissionActivity(), AuthView {
             when (viewModel.networkState) {
                 NetworkState.loading -> showProgress()
                 NetworkState.idle -> hideProgress()
-                else -> {
+                NetworkState.error -> {
                     hideProgress()
                     if (viewModel.error.isNullOrEmpty())
                         showError(getString(R.string.default_error))
+                    else showLoginError()
                 }
             }
         }
+    }
+
+    companion object {
+        const val FACEBOOK_PERMISSION = "public_profile"
     }
 }

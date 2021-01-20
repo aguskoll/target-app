@@ -52,4 +52,6 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">this email and password don’t match</string>
+    <string name="facebook_app_id">166925907359293</string>
+    <string name="fb_login_protocol_scheme">fb166925907359293</string>
 </resources>

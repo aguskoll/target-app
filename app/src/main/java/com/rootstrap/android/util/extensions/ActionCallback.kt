@@ -2,6 +2,7 @@ package com.rootstrap.android.util.extensions
 
 import com.google.gson.Gson
 import com.rootstrap.android.network.models.ErrorModel
+import com.rootstrap.android.util.ErrorUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -36,16 +37,7 @@ class ActionCallback {
                 response.errorBody()?.let {
                     val apiError = Gson().fromJson(it.charStream(), ErrorModel::class.java)
 
-                    errorMessage = if (apiError.errors is Map<*, *> && apiError.errors[FULL_ERROR_MESSAGES] is ArrayList<*>) {
-                        val results: ArrayList<*> =
-                            apiError.errors[FULL_ERROR_MESSAGES] as ArrayList<*>
-
-                        if (results.isNotEmpty() && results.first() is String) {
-                            results.first() as String
-                        } else apiError.error ?: ""
-                    } else {
-                        apiError.error ?: ""
-                    }
+                    errorMessage = ErrorUtil.handleCustomError(apiError)
 
                     return Result.failure(
                         ApiException(

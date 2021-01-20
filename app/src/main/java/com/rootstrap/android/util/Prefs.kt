@@ -14,6 +14,7 @@ class Prefs(context: Context) {
     val UID = "uid"
     val USER = "user"
     val SIGNED_IN = "signed_in"
+    val FACEBOOK_ACCESS_TOKEN = "facebook-access-token"
 
     val prefs: SharedPreferences = PreferenceManager
         .getDefaultSharedPreferences(context)
@@ -38,6 +39,10 @@ class Prefs(context: Context) {
     var signedIn: Boolean
         get() = prefs.getBoolean(SIGNED_IN, false)
         set(value) = prefs.edit().putBoolean(SIGNED_IN, value).apply()
+
+    var facebookAccessToken: String?
+        get() = prefs.getString(FACEBOOK_ACCESS_TOKEN, "")
+        set(value) = prefs.edit().putString(FACEBOOK_ACCESS_TOKEN, value).apply()
 
     fun clear() = prefs.edit().clear().apply()
 }
