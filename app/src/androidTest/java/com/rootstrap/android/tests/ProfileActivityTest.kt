@@ -6,8 +6,8 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.rootstrap.android.R
 import com.rootstrap.android.network.managers.SessionManager
-import com.rootstrap.android.ui.activity.main.ProfileActivity
-import com.rootstrap.android.ui.activity.main.SignUpActivity
+import com.rootstrap.android.ui.activity.main.authentication.ProfileActivity
+import com.rootstrap.android.ui.activity.main.authentication.SignUpActivity
 import com.rootstrap.android.utils.BaseTests
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse

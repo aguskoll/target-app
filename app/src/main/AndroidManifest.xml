@@ -21,17 +21,17 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.activity.main.MapActivity"
+            android:name=".ui.activity.main.targetpoint.TargetPointsActivity"
             android:label="@string/title_activity_map"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.main.SignUpActivity"
+            android:name=".ui.activity.main.authentication.SignUpActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.main.ProfileActivity"
+            android:name=".ui.activity.main.authentication.ProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.main.SignInActivity"
+            android:name=".ui.activity.main.authentication.SignInActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

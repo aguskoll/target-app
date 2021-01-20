@@ -1,25 +1,26 @@
-package com.rootstrap.android.ui.activity.main
+package com.rootstrap.android.ui.activity.main.targetpoint
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.rootstrap.android.R
-import com.rootstrap.android.databinding.ActivityMapBinding
+import com.rootstrap.android.databinding.ActivityTargetPointsBinding
+import com.rootstrap.android.ui.activity.main.authentication.ProfileActivity
 
-class MapActivity : AppCompatActivity() {
+class TargetPointsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMapBinding
+    private lateinit var binding: ActivityTargetPointsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMapBinding.inflate(layoutInflater)
+        binding = ActivityTargetPointsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
     }
 
     private fun initView() {
         initMapFragment()
-        binding.goToProfileBtn.setOnClickListener {
+        binding.toolbar.goToProfileBtn.setOnClickListener {
             startActivity(
                 Intent(
                     this,

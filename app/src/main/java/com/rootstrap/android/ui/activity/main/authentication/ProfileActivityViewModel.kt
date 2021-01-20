@@ -1,4 +1,4 @@
-package com.rootstrap.android.ui.activity.main
+package com.rootstrap.android.ui.activity.main.authentication
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +24,8 @@ open class ProfileActivityViewModel(listener: ViewModelListener?) : BaseViewMode
             val result = manager.signOut()
             if (result.isSuccess) {
                 networkState = NetworkState.idle
-                state = ProfileState.signOutSuccess
+                state =
+                    ProfileState.signOutSuccess
                 signOutFromFacebook()
                 SessionManager.signOut()
             } else {
@@ -46,10 +47,12 @@ open class ProfileActivityViewModel(listener: ViewModelListener?) : BaseViewMode
 
         networkState = NetworkState.idle
         networkState = NetworkState.error
-        state = ProfileState.signOutFailure
+        state =
+            ProfileState.signOutFailure
     }
 
-    var state: ProfileState = ProfileState.none
+    var state: ProfileState =
+        ProfileState.none
         set(value) {
             field = value
             listener?.updateState()
@@ -65,6 +68,8 @@ enum class ProfileState {
 class ProfileActivityViewModelFactory(var listener: ViewModelListener?) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return ProfileActivityViewModel(listener) as T
+        return ProfileActivityViewModel(
+            listener
+        ) as T
     }
 }

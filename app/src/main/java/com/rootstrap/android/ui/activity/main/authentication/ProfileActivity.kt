@@ -1,4 +1,4 @@
-package com.rootstrap.android.ui.activity.main
+package com.rootstrap.android.ui.activity.main.authentication
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +21,10 @@ class ProfileActivity : BaseActivity(), ProfileView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        val factory = ProfileActivityViewModelFactory(viewModelListener)
+        val factory =
+            ProfileActivityViewModelFactory(
+                viewModelListener
+            )
         viewModel = ViewModelProvider(this, factory)
             .get(ProfileActivityViewModel::class.java)
 

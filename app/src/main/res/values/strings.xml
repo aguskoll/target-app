@@ -56,4 +56,6 @@
     <string name="fb_login_protocol_scheme">fb166925907359293</string>
     <string name="title_activity_map">Map</string>
     <string name="target_points">Target Points</string>
+    <string name="create_new_target">create new target</string>
+    <string name="create_target_icon">create target icon</string>
 </resources>

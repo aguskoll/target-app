@@ -1,4 +1,4 @@
-package com.rootstrap.android.ui.activity.main
+package com.rootstrap.android.ui.activity.main.authentication
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +21,8 @@ open class SignUpActivityViewModel(listener: ViewModelListener?) : BaseViewModel
 
     private val manager: IUserManager = UserManager
 
-    var state: SignUpState = SignUpState.none
+    var state: SignUpState =
+        SignUpState.none
         set(value) {
             field = value
             listener?.updateState()
@@ -61,7 +62,8 @@ open class SignUpActivityViewModel(listener: ViewModelListener?) : BaseViewModel
                     }
 
                     networkState = NetworkState.idle
-                    state = SignUpState.signUpSuccess
+                    state =
+                        SignUpState.signUpSuccess
                 } else {
                     handleError(result.exceptionOrNull())
                 }
@@ -77,7 +79,8 @@ open class SignUpActivityViewModel(listener: ViewModelListener?) : BaseViewModel
         } else null
 
         networkState = NetworkState.error
-        state = SignUpState.signUpFailure
+        state =
+            SignUpState.signUpFailure
     }
 
     companion object {
@@ -93,6 +96,8 @@ enum class SignUpState {
 
 class SignUpActivityViewModelFactory(var listener: ViewModelListener?) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return SignUpActivityViewModel(listener) as T
+        return SignUpActivityViewModel(
+            listener
+        ) as T
     }
 }

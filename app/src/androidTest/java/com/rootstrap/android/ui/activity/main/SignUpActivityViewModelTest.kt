@@ -1,5 +1,7 @@
 package com.rootstrap.android.ui.activity.main
 
+import com.rootstrap.android.ui.activity.main.authentication.SignUpActivityViewModel
+import com.rootstrap.android.ui.activity.main.authentication.SignUpState
 import com.rootstrap.android.util.ViewModelListener
 import com.rootstrap.android.utils.BaseTests
 import junit.framework.Assert
@@ -14,11 +16,13 @@ class SignUpActivityViewModelTest : BaseTests() {
     @Before
     fun setUp() {
         super.before()
-        signUpActivityViewModel = SignUpActivityViewModel(object : ViewModelListener {
-            override fun updateState() {}
+        signUpActivityViewModel =
+            SignUpActivityViewModel(
+                object : ViewModelListener {
+                    override fun updateState() {}
 
-            override fun updateNetworkState() {}
-        })
+                    override fun updateNetworkState() {}
+                })
     }
 
     @Test

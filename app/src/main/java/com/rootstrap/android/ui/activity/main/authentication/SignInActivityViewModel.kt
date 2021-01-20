@@ -1,4 +1,4 @@
-package com.rootstrap.android.ui.activity.main
+package com.rootstrap.android.ui.activity.main.authentication
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,7 +9,7 @@ import com.rootstrap.android.network.managers.UserManager
 import com.rootstrap.android.network.models.FacebookSignIn
 import com.rootstrap.android.network.models.User
 import com.rootstrap.android.network.models.UserSerializer
-import com.rootstrap.android.ui.activity.main.SignUpActivityViewModel.Companion.MIN_CHAR_PASSWORD
+import com.rootstrap.android.ui.activity.main.authentication.SignUpActivityViewModel.Companion.MIN_CHAR_PASSWORD
 import com.rootstrap.android.ui.base.BaseViewModel
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.ViewModelListener
@@ -24,7 +24,8 @@ open class SignInActivityViewModel(
     private var manager: IUserManager
 ) : BaseViewModel(listener) {
 
-    var state: SignInState = SignInState.none
+    var state: SignInState =
+        SignInState.none
         set(value) {
             field = value
             listener?.updateState()
@@ -68,7 +69,8 @@ open class SignInActivityViewModel(
                 SessionManager.signIn(user)
             }
             networkState = NetworkState.idle
-            state = SignInState.signInSuccess
+            state =
+                SignInState.signInSuccess
         } else {
             handleError(result.exceptionOrNull())
         }
@@ -81,7 +83,8 @@ open class SignInActivityViewModel(
 
         networkState = NetworkState.idle
         networkState = NetworkState.error
-        state = SignInState.signInFailure
+        state =
+            SignInState.signInFailure
     }
 }
 
@@ -93,6 +96,9 @@ enum class SignInState {
 
 class SignInActivityViewModelFactory(var listener: ViewModelListener?) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return SignInActivityViewModel(listener, UserManager) as T
+        return SignInActivityViewModel(
+            listener,
+            UserManager
+        ) as T
     }
 }

@@ -1,4 +1,4 @@
-package com.rootstrap.android.ui.activity.main
+package com.rootstrap.android.ui.activity.main.targetpoint
 
 import android.os.Bundle
 import android.view.LayoutInflater

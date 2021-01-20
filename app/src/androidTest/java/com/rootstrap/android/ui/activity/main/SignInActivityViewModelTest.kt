@@ -1,6 +1,7 @@
 package com.rootstrap.android.ui.activity.main
 
 import com.rootstrap.android.network.managers.UserManager
+import com.rootstrap.android.ui.activity.main.authentication.SignInActivityViewModel
 import com.rootstrap.android.util.ViewModelListener
 import com.rootstrap.android.utils.BaseTests
 import junit.framework.Assert.assertFalse
@@ -15,14 +16,15 @@ class SignInActivityViewModelTest : BaseTests() {
     @Before
     fun setUp() {
         super.before()
-        viewModel = SignInActivityViewModel(
-            object : ViewModelListener {
-                override fun updateState() {}
+        viewModel =
+            SignInActivityViewModel(
+                object : ViewModelListener {
+                    override fun updateState() {}
 
-                override fun updateNetworkState() {}
-            },
-            UserManager
-        )
+                    override fun updateNetworkState() {}
+                },
+                UserManager
+            )
     }
 
     @Test

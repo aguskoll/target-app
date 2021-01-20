@@ -1,4 +1,4 @@
-package com.rootstrap.android.ui.activity.main
+package com.rootstrap.android.ui.activity.main.authentication
 
 import android.content.Intent
 import android.os.Bundle
@@ -15,6 +15,7 @@ import com.rootstrap.android.metrics.Analytics
 import com.rootstrap.android.metrics.PageEvents
 import com.rootstrap.android.metrics.VISIT_SIGN_IN
 import com.rootstrap.android.network.models.User
+import com.rootstrap.android.ui.activity.main.targetpoint.TargetPointsActivity
 import com.rootstrap.android.ui.view.AuthView
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.ViewModelListener
@@ -37,7 +38,10 @@ class SignInActivity : PermissionActivity(), AuthView {
 
         Analytics.track(PageEvents.visit(VISIT_SIGN_IN))
 
-        val factory = SignInActivityViewModelFactory(viewModelListener)
+        val factory =
+            SignInActivityViewModelFactory(
+                viewModelListener
+            )
         viewModel = ViewModelProvider(this, factory)
             .get(SignInActivityViewModel::class.java)
 
@@ -55,7 +59,7 @@ class SignInActivity : PermissionActivity(), AuthView {
     }
 
     override fun showMainPage() {
-        startActivityClearTask(MapActivity())
+        startActivityClearTask(TargetPointsActivity())
     }
 
     private fun logInWithFacebook() {
