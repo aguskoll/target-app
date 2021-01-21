@@ -21,10 +21,8 @@ class ProfileActivity : BaseActivity(), ProfileView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        val factory =
-            ProfileActivityViewModelFactory(
-                viewModelListener
-            )
+        val factory = ProfileActivityViewModelFactory(viewModelListener)
+
         viewModel = ViewModelProvider(this, factory)
             .get(ProfileActivityViewModel::class.java)
 

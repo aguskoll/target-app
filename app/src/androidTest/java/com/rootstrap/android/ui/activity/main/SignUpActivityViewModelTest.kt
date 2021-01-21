@@ -16,13 +16,12 @@ class SignUpActivityViewModelTest : BaseTests() {
     @Before
     fun setUp() {
         super.before()
-        signUpActivityViewModel =
-            SignUpActivityViewModel(
-                object : ViewModelListener {
-                    override fun updateState() {}
+        signUpActivityViewModel = SignUpActivityViewModel(
+            object : ViewModelListener {
+                override fun updateState() {}
 
-                    override fun updateNetworkState() {}
-                })
+                override fun updateNetworkState() {}
+            })
     }
 
     @Test
