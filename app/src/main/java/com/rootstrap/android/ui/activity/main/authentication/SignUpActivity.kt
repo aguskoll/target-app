@@ -29,10 +29,8 @@ class SignUpActivity : BaseActivity(), AuthView {
         setContentView(R.layout.activity_sign_up)
         Analytics.track(PageEvents.visit(VISIT_SIGN_UP))
 
-        val factory =
-            SignUpActivityViewModelFactory(
-                viewModelListener
-            )
+        val factory = SignUpActivityViewModelFactory(viewModelListener)
+
         viewModel = ViewModelProvider(this, factory)
             .get(SignUpActivityViewModel::class.java)
 

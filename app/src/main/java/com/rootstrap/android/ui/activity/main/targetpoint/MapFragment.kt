@@ -74,6 +74,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             mMap.isMyLocationEnabled = true
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 location?.run {
+                    listener?.saveUserLocation(latitude, longitude)
                     addMarker(latitude, longitude)
                 }
             }
@@ -138,5 +139,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     interface MapFragmentInteraction {
         fun askForLocationPermission(permissionGranted: () -> Unit)
+        fun saveUserLocation(lat: Double, lng: Double)
     }
 }

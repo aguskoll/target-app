@@ -58,4 +58,10 @@
     <string name="target_points">Target Points</string>
     <string name="create_new_target">create new target</string>
     <string name="create_target_icon">create target icon</string>
+    <string name="specify_area_length">Specify area length</string>
+    <string name="target_title">target title</string>
+    <string name="select_a_topic">select a topic</string>
+    <string name="what_do_you_want_to_talk">What do you want to talk about?</string>
+    <string name="choose_a_title_for_your_target">Choose a title for your target</string>
+    <string name="save_target_btn">save target</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.rootstrap.android.network.services
 
 import com.rootstrap.android.network.models.FacebookSignIn
+import com.rootstrap.android.network.models.TargetPointSerializer
 import com.rootstrap.android.network.models.UserSerializer
 import retrofit2.Call
 import retrofit2.http.Body
@@ -20,4 +21,7 @@ interface ApiService {
 
     @DELETE("users/sign_out")
     fun signOut(): Call<Void>
+
+    @POST("targets")
+    fun createTarget(@Body target: TargetPointSerializer): Call<TargetPointSerializer>
 }
