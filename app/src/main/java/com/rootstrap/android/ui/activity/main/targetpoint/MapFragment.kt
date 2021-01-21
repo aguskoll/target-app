@@ -44,7 +44,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    // todo remove example marker when we have the user location
+    // TODO: remove example marker when we have the user location
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         addMarker(EXAMPLE_LAT, EXAMPLE_LONG)
@@ -90,7 +90,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         const val CIRCLE_RADIUS = 90.0
         const val CIRCLE_STROKE_WIDTH = 2f
 
-        // todo: remove this examples
+        // TODO: remove this examples
         const val EXAMPLE_LAT = -38.69
         const val EXAMPLE_LONG = -62.25
 

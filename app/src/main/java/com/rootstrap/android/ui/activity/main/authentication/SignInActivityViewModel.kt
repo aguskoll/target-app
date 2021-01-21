@@ -24,8 +24,7 @@ open class SignInActivityViewModel(
     private var manager: IUserManager
 ) : BaseViewModel(listener) {
 
-    var state: SignInState =
-        SignInState.none
+    var state: SignInState = SignInState.none
         set(value) {
             field = value
             listener?.updateState()
@@ -69,8 +68,7 @@ open class SignInActivityViewModel(
                 SessionManager.signIn(user)
             }
             networkState = NetworkState.idle
-            state =
-                SignInState.signInSuccess
+            state = SignInState.signInSuccess
         } else {
             handleError(result.exceptionOrNull())
         }
@@ -83,8 +81,7 @@ open class SignInActivityViewModel(
 
         networkState = NetworkState.idle
         networkState = NetworkState.error
-        state =
-            SignInState.signInFailure
+        state = SignInState.signInFailure
     }
 }
 
@@ -96,9 +93,6 @@ enum class SignInState {
 
 class SignInActivityViewModelFactory(var listener: ViewModelListener?) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return SignInActivityViewModel(
-            listener,
-            UserManager
-        ) as T
+        return SignInActivityViewModel(listener, UserManager) as T
     }
 }

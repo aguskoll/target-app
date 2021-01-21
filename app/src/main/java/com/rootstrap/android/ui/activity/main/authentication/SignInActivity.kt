@@ -38,10 +38,8 @@ class SignInActivity : PermissionActivity(), AuthView {
 
         Analytics.track(PageEvents.visit(VISIT_SIGN_IN))
 
-        val factory =
-            SignInActivityViewModelFactory(
-                viewModelListener
-            )
+        val factory = SignInActivityViewModelFactory(viewModelListener)
+
         viewModel = ViewModelProvider(this, factory)
             .get(SignInActivityViewModel::class.java)
 
