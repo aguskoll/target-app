@@ -1,13 +1,15 @@
 package com.rootstrap.android.ui.activity.main.targetpoint
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.ActivityTargetPointsBinding
 import com.rootstrap.android.ui.activity.main.authentication.ProfileActivity
+import com.rootstrap.android.util.permissions.PermissionActivity
+import com.rootstrap.android.util.permissions.PermissionResponse
 
-class TargetPointsActivity : AppCompatActivity() {
+class TargetPointsActivity : PermissionActivity(), MapFragment.MapFragmentInteraction {
 
     private lateinit var binding: ActivityTargetPointsBinding
 
@@ -33,5 +35,21 @@ class TargetPointsActivity : AppCompatActivity() {
     private fun initMapFragment() {
         val fragment = MapFragment.newInstance()
         supportFragmentManager.beginTransaction().replace(R.id.fragment_map, fragment).commit()
+    }
+
+    override fun askForLocationPermission(permissionGranted: () -> Unit) {
+        requestPermission(
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            object : PermissionResponse {
+                override fun granted() {
+                    permissionGranted()
+                }
+
+                override fun denied() = Unit
+
+                override fun foreverDenied() = Unit
+            })
     }
 }

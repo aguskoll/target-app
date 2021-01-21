@@ -1,11 +1,15 @@
 package com.rootstrap.android.ui.activity.main.targetpoint
 
+import android.Manifest
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -17,12 +21,15 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.FragmentMapBinding
+import com.rootstrap.android.util.extensions.isPermissionGranted
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var binding: FragmentMapBinding
+    private var listener: MapFragmentInteraction? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +42,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(layoutInflater, container, false)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         return binding.root
     }
 
@@ -44,10 +52,41 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    // TODO: remove example marker when we have the user location
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        addMarker(EXAMPLE_LAT, EXAMPLE_LONG)
+        checkLocationPermission()
+    }
+
+    private fun checkLocationPermission() {
+        if (requireContext().isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION).not() ||
+            requireContext().isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION).not()
+        ) {
+            getDeviceLocation()
+        } else {
+            listener?.askForLocationPermission {
+                getDeviceLocation()
+            }
+        }
+    }
+
+    private fun getDeviceLocation() {
+        try {
+            mMap.isMyLocationEnabled = true
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                location?.run {
+                    addMarker(latitude, longitude)
+                }
+            }
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MapFragmentInteraction) {
+            listener = context
+        }
     }
 
     private fun addMarker(latitude: Double, longitude: Double) {
@@ -90,14 +129,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         const val CIRCLE_RADIUS = 90.0
         const val CIRCLE_STROKE_WIDTH = 2f
 
-        // TODO: remove this examples
-        const val EXAMPLE_LAT = -38.69
-        const val EXAMPLE_LONG = -62.25
-
         @JvmStatic
         fun newInstance() =
             MapFragment().apply {
                 arguments = Bundle().apply {}
             }
+    }
+
+    interface MapFragmentInteraction {
+        fun askForLocationPermission(permissionGranted: () -> Unit)
     }
 }
