@@ -3,7 +3,7 @@ package com.rootstrap.android.ui.activity.main.targetpoint
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.rootstrap.android.databinding.ActivityTargetPointsBinding
-import com.rootstrap.android.network.models.TargetPoint
+import com.rootstrap.android.network.models.Target
 import com.rootstrap.android.util.extensions.value
 import kotlinx.android.synthetic.main.fragment_create_target.view.*
 
@@ -26,10 +26,10 @@ class CreateTargetView(
     private fun createTarget() {
         val title = binding.root.title_edit_text.value()
         val area = binding.root.area_edit_text.value().toDouble()
-        val topic = 2
+        val topic = binding.root.topic_edit_text.value().toInt()
         val lat = createTargetViewModel.getLocationLatitude()
         val lng = createTargetViewModel.getLocationLongitude()
-        val target = TargetPoint(title, lat, lng, area, topic)
+        val target = Target(title, lat, lng, area, topic)
 
         if (createTargetViewModel.isLocationStateSuccess()) {
             createTargetViewModel.createTarget(target)

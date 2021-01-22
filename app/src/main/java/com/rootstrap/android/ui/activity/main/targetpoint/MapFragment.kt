@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -30,6 +31,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentMapBinding
     private var listener: MapFragmentInteraction? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var createTargetViewModel: CreateTargetViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +45,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         binding = FragmentMapBinding.inflate(layoutInflater, container, false)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        val factory = CreateTargetViewModelViewModelFactory()
+        createTargetViewModel = ViewModelProvider(this, factory).get(CreateTargetViewModel::class.java)
         return binding.root
     }
 
@@ -74,7 +78,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             mMap.isMyLocationEnabled = true
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 location?.run {
-                    listener?.saveUserLocation(latitude, longitude)
+                    createTargetViewModel.saveUserLocation(latitude, longitude)
                     addMarker(latitude, longitude)
                 }
             }
@@ -139,6 +143,5 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     interface MapFragmentInteraction {
         fun askForLocationPermission(permissionGranted: () -> Unit)
-        fun saveUserLocation(lat: Double, lng: Double)
     }
 }

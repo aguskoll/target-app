@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.rootstrap.android.network.managers.ITargetPointManager
 import com.rootstrap.android.network.managers.TargetPointManager
-import com.rootstrap.android.network.models.TargetPoint
+import com.rootstrap.android.network.models.Target
 import com.rootstrap.android.ui.base.BaseViewModel
 import com.rootstrap.android.util.NetworkState
 import kotlinx.coroutines.launch
@@ -15,27 +15,35 @@ import java.io.IOException
 class CreateTargetViewModel(private val targetManager: ITargetPointManager) : BaseViewModel(null) {
 
     var createTargetState: MutableLiveData<CreateTargetState> = MutableLiveData()
+    var newTarget: MutableLiveData<Target> = MutableLiveData()
 
-    fun createTarget(targetPoint: TargetPoint) {
+    fun createTarget(target: Target) {
         try {
             networkState = NetworkState.loading
             viewModelScope.launch {
-                val result = targetManager.createTarget(targetPoint)
+                val result = targetManager.createTarget(target)
                 if (result.isSuccess) {
-                    createTargetState.value = CreateTargetState.success
+                    createTargetState.postValue(CreateTargetState.success)
+                    networkState = NetworkState.idle
+                    result.getOrNull()?.value?.target?.let { target ->
+                        newTarget.postValue(target)
+                    }
                 } else {
-                    createTargetState.value = CreateTargetState.fail
+                    handleError(result.exceptionOrNull())
                 }
             }
         } catch (exception: IOException) {
-            networkState = NetworkState.error
             exception.printStackTrace()
         }
     }
 
-    fun saveUserLocation(lat: Double, lng: Double) {
-        targetManager.saveUserLocation(lat, lng)
+    private fun handleError(exception: Throwable?) {
+        createTargetState.value = CreateTargetState.fail
+        networkState = NetworkState.error
+        error = getMessageErrorFromException(exception)
     }
+
+    fun saveUserLocation(lat: Double, lng: Double) = targetManager.saveUserLocation(lat, lng)
 
     fun getLocationLatitude(): Double = targetManager.getLocationLatitude()
 

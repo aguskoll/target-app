@@ -6,6 +6,10 @@ import com.rootstrap.android.network.models.ErrorModel
 class ErrorUtil {
 
     companion object {
+
+        private const val FULL_MESSAGES = "full_messages"
+        private const val TOPIC = "topic"
+
         fun handleCustomError(error: ErrorModel): String {
             var message = ""
             if (error.errors != null) {
@@ -17,7 +21,11 @@ class ErrorUtil {
                     error.errors.values.first() is List<*>
                 ) {
                     val errors = error.errors as Map<String, List<String>>
-                    message = errors.getValue("full_messages").first()
+                    message = when {
+                        errors.containsKey(FULL_MESSAGES) -> errors.getValue(FULL_MESSAGES).first()
+                        errors.containsKey(TOPIC) -> TOPIC + ": " + errors.getValue(TOPIC).first()
+                        else -> ""
+                    }
                 }
             } else if (error.error != null && !error.error.isEmpty()) {
                 message = error.error

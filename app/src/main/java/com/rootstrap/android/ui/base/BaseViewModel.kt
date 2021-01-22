@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.rootstrap.android.bus
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.ViewModelListener
+import com.rootstrap.android.util.extensions.ApiErrorType
+import com.rootstrap.android.util.extensions.ApiException
 
 /**
  * A [ViewModel] base class
@@ -20,6 +22,12 @@ open class BaseViewModel(var listener: ViewModelListener?) : ViewModel(), Lifecy
             field = value
             listener?.updateNetworkState()
         }
+
+    fun getMessageErrorFromException(exception: Throwable?): String? {
+        return if (exception is ApiException && exception.errorType == ApiErrorType.apiError) {
+            exception.message
+        } else null
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun register() = bus.register(this)

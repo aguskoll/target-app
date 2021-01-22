@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:id="@+id/create_target_bottom_sheet"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.activity.main.targetpoint.CreateTargetFragment"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     app:behavior_hideable="true"
     android:background="@android:color/white"
@@ -36,7 +35,10 @@
             android:id="@+id/area_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:gravity="center"
+            android:hint="@string/m"
+            android:textStyle="bold"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,7 +67,7 @@
             android:id="@+id/title_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapCharacters"
+            android:inputType="text"
             android:hint="@string/choose_a_title_for_your_target"
             android:gravity="center"
             android:textStyle="bold"/>
@@ -97,7 +99,7 @@
             android:id="@+id/topic_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapCharacters"
+            android:inputType="text"
             android:gravity="center"
             android:textStyle="bold"
             android:hint="@string/what_do_you_want_to_talk"/>

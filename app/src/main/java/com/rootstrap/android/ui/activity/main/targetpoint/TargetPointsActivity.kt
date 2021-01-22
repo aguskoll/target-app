@@ -34,10 +34,13 @@ class TargetPointsActivity : PermissionActivity(), MapFragment.MapFragmentIntera
     }
 
     private fun observeCreateTargetState() {
-        createTargetViewModel.createTargetState.observe(this, Observer {
-            when (it) {
-                CreateTargetState.fail -> showError(null)
-                CreateTargetState.none, CreateTargetState.success -> {}
+        createTargetViewModel.createTargetState.observe(this, Observer { targetState ->
+            targetState?.run {
+                when (this) {
+                    CreateTargetState.fail -> showError(createTargetViewModel.error ?: getString(R.string.default_error))
+                    CreateTargetState.none, CreateTargetState.success -> {
+                    }
+                }
             }
         })
     }
@@ -82,10 +85,6 @@ class TargetPointsActivity : PermissionActivity(), MapFragment.MapFragmentIntera
 
                 override fun foreverDenied() = Unit
             })
-    }
-
-    override fun saveUserLocation(lat: Double, lng: Double) {
-        createTargetViewModel.saveUserLocation(lat, lng)
     }
 
     companion object {
