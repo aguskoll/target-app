@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.FragmentMapBinding
-import com.rootstrap.android.util.extensions.isPermissionGranted
+import com.rootstrap.android.util.permissions.checkNotGrantedPermissions
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
@@ -58,9 +58,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun checkLocationPermission() {
-        if (requireContext().isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION).not() ||
-            requireContext().isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION).not()
-        ) {
+        val permissions = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (requireContext().checkNotGrantedPermissions(permissions).isEmpty()) {
             getDeviceLocation()
         } else {
             listener?.askForLocationPermission {
