@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.ActivityTargetPointsBinding
 import com.rootstrap.android.ui.activity.main.authentication.ProfileActivity
+import com.rootstrap.android.util.NetworkState
+import com.rootstrap.android.util.extensions.hideKeyboard
 import com.rootstrap.android.util.permissions.PermissionActivity
 import com.rootstrap.android.util.permissions.PermissionResponse
 
@@ -30,6 +32,8 @@ class TargetPointsActivity : PermissionActivity(), MapFragment.MapFragmentIntera
 
         observeCreateTargetState()
 
+        observeNetworkState()
+
         initView()
     }
 
@@ -38,8 +42,27 @@ class TargetPointsActivity : PermissionActivity(), MapFragment.MapFragmentIntera
             targetState?.run {
                 when (this) {
                     CreateTargetState.fail -> showError(createTargetViewModel.error ?: getString(R.string.default_error))
-                    CreateTargetState.none, CreateTargetState.success -> {
+                    CreateTargetState.success -> {
+                        successCreatingTarget()
                     }
+                    CreateTargetState.none -> Unit
+                }
+            }
+        })
+    }
+
+    // TODO: show target in map
+    private fun successCreatingTarget() {
+        createTargetView.expandCollapseSheet()
+        hideKeyboard()
+    }
+
+    private fun observeNetworkState() {
+        createTargetViewModel.networkStateObservable.observe(this, Observer { state ->
+            state?.run {
+                when (state) {
+                    NetworkState.loading -> showProgress()
+                    NetworkState.error, NetworkState.idle -> hideProgress()
                 }
             }
         })

@@ -17,10 +17,11 @@ class CreateTargetViewModel(private val targetManager: ITargetPointManager) : Ba
 
     var createTargetState: MutableLiveData<CreateTargetState> = MutableLiveData()
     var newTarget: MutableLiveData<Target> = MutableLiveData()
+    var networkStateObservable: MutableLiveData<NetworkState> = MutableLiveData()
 
     fun createTarget(target: Target) {
         try {
-            networkState = NetworkState.loading
+            networkStateObservable.postValue(NetworkState.loading)
             viewModelScope.launch {
                 val result = targetManager.createTarget(target)
                 if (result.isSuccess) {
@@ -30,6 +31,7 @@ class CreateTargetViewModel(private val targetManager: ITargetPointManager) : Ba
                 }
             }
         } catch (exception: IOException) {
+            handleError(exception)
             exception.printStackTrace()
         }
     }
@@ -51,15 +53,15 @@ class CreateTargetViewModel(private val targetManager: ITargetPointManager) : Ba
 
     private fun handleSuccess(target: Target?) {
         createTargetState.postValue(CreateTargetState.success)
-        networkState = NetworkState.idle
+        networkStateObservable.postValue(NetworkState.idle)
         target?.let {
             newTarget.postValue(it)
         }
     }
 
     private fun handleError(exception: Throwable?) {
-        createTargetState.value = CreateTargetState.fail
-        networkState = NetworkState.error
+        createTargetState.postValue(CreateTargetState.fail)
+        networkStateObservable.postValue(NetworkState.error)
         error = getMessageErrorFromException(exception)
     }
 
@@ -70,6 +72,10 @@ class CreateTargetViewModel(private val targetManager: ITargetPointManager) : Ba
     fun getLocationLongitude(): Double = targetManager.getLocationLongitude()
 
     fun isLocationStateSuccess(): Boolean = targetManager.isLocationStateSuccess()
+
+    fun canCreateTopic(area: Double, title: String?, topic: Int): Boolean {
+        return area > 0 && title.isNullOrEmpty().not() && topic > 0
+    }
 }
 
 class CreateTargetViewModelViewModelFactory() : ViewModelProvider.Factory {

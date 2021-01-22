@@ -24,15 +24,18 @@ class CreateTargetView(
         createTargetViewModel.getTopics()
     }
 
+    // TODO: show real topics and handle selection
     private fun createTarget() {
         val title = binding.root.title_edit_text.value()
-        val area = binding.root.area_edit_text.value().toDouble()
-        val topic = binding.root.topic_edit_text.value().toInt()
+        val area: Double = binding.root.area_edit_text.value().toDoubleOrNull() ?: 0.0
+        val topic: Int = binding.root.topic_edit_text.value().toIntOrNull() ?: 0
         val lat = createTargetViewModel.getLocationLatitude()
         val lng = createTargetViewModel.getLocationLongitude()
         val target = Target(title, lat, lng, area, topic)
 
-        if (createTargetViewModel.isLocationStateSuccess()) {
+        if (createTargetViewModel.isLocationStateSuccess() &&
+            createTargetViewModel.canCreateTopic(area, title, topic)
+        ) {
             createTargetViewModel.createTarget(target)
         }
     }
