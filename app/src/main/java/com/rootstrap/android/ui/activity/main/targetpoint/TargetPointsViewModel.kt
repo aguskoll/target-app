@@ -23,17 +23,21 @@ class CreateTargetViewModel(private val targetManager: ITargetPointManager) : Ba
             viewModelScope.launch {
                 val result = targetManager.createTarget(target)
                 if (result.isSuccess) {
-                    createTargetState.postValue(CreateTargetState.success)
-                    networkState = NetworkState.idle
-                    result.getOrNull()?.value?.target?.let { target ->
-                        newTarget.postValue(target)
-                    }
+                    handleSuccess(result.getOrNull()?.value?.target)
                 } else {
                     handleError(result.exceptionOrNull())
                 }
             }
         } catch (exception: IOException) {
             exception.printStackTrace()
+        }
+    }
+
+    private fun handleSuccess(target: Target?) {
+        createTargetState.postValue(CreateTargetState.success)
+        networkState = NetworkState.idle
+        target?.let {
+            newTarget.postValue(it)
         }
     }
 
