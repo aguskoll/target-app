@@ -1,9 +1,5 @@
 package com.rootstrap.android.util.extensions
 
-import android.content.Context
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
-
 fun String.validate(pattern: String): Boolean {
     return pattern.toRegex().matches(this)
 }
@@ -22,8 +18,4 @@ fun String.isEmail(): Boolean {
 
 fun Boolean?.isTrue(): Boolean {
     return this == true
-}
-
-fun Context.isPermissionGranted(permission: String): Boolean {
-    return ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED
 }

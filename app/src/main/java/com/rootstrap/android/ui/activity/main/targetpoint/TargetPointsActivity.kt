@@ -1,6 +1,5 @@
 package com.rootstrap.android.ui.activity.main.targetpoint
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -12,6 +11,7 @@ import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.extensions.hideKeyboard
 import com.rootstrap.android.util.permissions.PermissionActivity
 import com.rootstrap.android.util.permissions.PermissionResponse
+import com.rootstrap.android.util.permissions.locationPermissions
 
 class TargetPointsActivity : PermissionActivity(), MapFragment.MapFragmentInteraction {
 
@@ -95,10 +95,7 @@ class TargetPointsActivity : PermissionActivity(), MapFragment.MapFragmentIntera
 
     override fun askForLocationPermission(permissionGranted: () -> Unit) {
         requestPermission(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ),
+            locationPermissions,
             object : PermissionResponse {
                 override fun granted() {
                     permissionGranted()
