@@ -1,6 +1,5 @@
 package com.rootstrap.android.ui.activity.main.targetpoint
 
-import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.FragmentMapBinding
 import com.rootstrap.android.util.permissions.checkNotGrantedPermissions
+import com.rootstrap.android.util.permissions.locationPermissions
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
@@ -58,8 +58,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun checkLocationPermission() {
-        val permissions = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-        if (requireContext().checkNotGrantedPermissions(permissions).isEmpty()) {
+        if (requireContext().checkNotGrantedPermissions(locationPermissions).isEmpty()) {
             getDeviceLocation()
         } else {
             listener?.askForLocationPermission {
