@@ -7,7 +7,7 @@ open class PermissionFragment : BaseFragment() {
 
     private var permissionListener: PermissionResponse? = null
 
-    private fun requestPermission(permissions: Array<String>, listener: PermissionResponse) {
+    fun requestPermission(permissions: Array<String>, listener: PermissionResponse) {
         permissionListener = listener
         activity?.let { activityContext ->
             val notGrantedPermissions = activityContext.checkNotGrantedPermissions(permissions)

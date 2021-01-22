@@ -10,11 +10,9 @@ import com.rootstrap.android.databinding.ActivityTargetPointsBinding
 import com.rootstrap.android.ui.activity.main.authentication.ProfileActivity
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.extensions.hideKeyboard
-import com.rootstrap.android.util.permissions.PermissionActivity
-import com.rootstrap.android.util.permissions.PermissionResponse
-import com.rootstrap.android.util.permissions.locationPermissions
+import com.rootstrap.android.ui.base.BaseActivity
 
-class TargetPointsActivity : PermissionActivity(), MapFragment.MapFragmentInteraction {
+class TargetPointsActivity : BaseActivity() {
 
     private lateinit var binding: ActivityTargetPointsBinding
 
@@ -93,20 +91,6 @@ class TargetPointsActivity : PermissionActivity(), MapFragment.MapFragmentIntera
         binding.goToTargetContainer.setOnClickListener {
             createTargetView.expandCollapseSheet()
         }
-    }
-
-    override fun askForLocationPermission(permissionGranted: () -> Unit) {
-        requestPermission(
-            locationPermissions,
-            object : PermissionResponse {
-                override fun granted() {
-                    permissionGranted()
-                }
-
-                override fun denied() = Unit
-
-                override fun foreverDenied() = Unit
-            })
     }
 
     companion object {
