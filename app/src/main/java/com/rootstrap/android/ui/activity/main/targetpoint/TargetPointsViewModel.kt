@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.rootstrap.android.network.managers.ITargetPointManager
 import com.rootstrap.android.network.managers.TargetPointManager
 import com.rootstrap.android.network.models.Target
+import com.rootstrap.android.network.models.Topic
 import com.rootstrap.android.ui.base.BaseViewModel
 import com.rootstrap.android.util.NetworkState
 import kotlinx.coroutines.launch
@@ -24,6 +25,21 @@ class CreateTargetViewModel(private val targetManager: ITargetPointManager) : Ba
                 val result = targetManager.createTarget(target)
                 if (result.isSuccess) {
                     handleSuccess(result.getOrNull()?.value?.target)
+                } else {
+                    handleError(result.exceptionOrNull())
+                }
+            }
+        } catch (exception: IOException) {
+            exception.printStackTrace()
+        }
+    }
+
+    fun getTopics() {
+        try {
+            viewModelScope.launch {
+                val result = targetManager.getTopics()
+                if (result.isSuccess) {
+                    val topics: List<Topic> = result.getOrNull()?.value?.topics ?: emptyList()
                 } else {
                     handleError(result.exceptionOrNull())
                 }

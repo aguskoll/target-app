@@ -2,10 +2,12 @@ package com.rootstrap.android.network.services
 
 import com.rootstrap.android.network.models.FacebookSignIn
 import com.rootstrap.android.network.models.TargetPointSerializer
+import com.rootstrap.android.network.models.TopicsSerializer
 import com.rootstrap.android.network.models.UserSerializer
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface ApiService {
@@ -24,4 +26,7 @@ interface ApiService {
 
     @POST("targets")
     fun createTarget(@Body target: TargetPointSerializer): Call<TargetPointSerializer>
+
+    @GET("topics")
+    fun getTopics(): Call<TopicsSerializer>
 }

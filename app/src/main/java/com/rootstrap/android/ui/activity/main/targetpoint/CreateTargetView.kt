@@ -21,6 +21,7 @@ class CreateTargetView(
         binding.root.save_target_btn.setOnClickListener {
             createTarget()
         }
+        createTargetViewModel.getTopics()
     }
 
     private fun createTarget() {

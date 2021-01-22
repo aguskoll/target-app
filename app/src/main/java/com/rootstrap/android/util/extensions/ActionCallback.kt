@@ -12,8 +12,6 @@ class ActionCallback {
 
     companion object {
 
-        const val FULL_ERROR_MESSAGES = "full_messages"
-
         suspend fun <T> call(apiCall: Call<T>): Result<Data<T>> =
             withContext(Dispatchers.IO) {
                 val response = apiCall.execute()
