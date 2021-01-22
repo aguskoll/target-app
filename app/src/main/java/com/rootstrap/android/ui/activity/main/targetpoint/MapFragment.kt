@@ -1,12 +1,10 @@
 package com.rootstrap.android.ui.activity.main.targetpoint
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -20,15 +18,16 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.FragmentMapBinding
+import com.rootstrap.android.util.permissions.PermissionFragment
+import com.rootstrap.android.util.permissions.PermissionResponse
 import com.rootstrap.android.util.permissions.checkNotGrantedPermissions
 import com.rootstrap.android.util.permissions.locationPermissions
 
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : PermissionFragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var binding: FragmentMapBinding
-    private var listener: MapFragmentInteraction? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +60,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (requireContext().checkNotGrantedPermissions(locationPermissions).isEmpty()) {
             getDeviceLocation()
         } else {
-            listener?.askForLocationPermission {
+            askForLocationPermission {
                 getDeviceLocation()
             }
         }
@@ -77,13 +76,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         } catch (e: SecurityException) {
             e.printStackTrace()
-        }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is MapFragmentInteraction) {
-            listener = context
         }
     }
 
@@ -120,6 +112,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
+    private fun askForLocationPermission(permissionGranted: () -> Unit) {
+        requestPermission(
+            locationPermissions,
+            object : PermissionResponse {
+                override fun granted() {
+                    permissionGranted()
+                }
+
+                override fun denied() = Unit
+
+                override fun foreverDenied() = Unit
+            })
+    }
+
     companion object {
         const val GOOGLE_MAPS_ZOOM = 15f
         const val GOOGLE_MAPS_BEARING = 0f
@@ -132,9 +138,5 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             MapFragment().apply {
                 arguments = Bundle().apply {}
             }
-    }
-
-    interface MapFragmentInteraction {
-        fun askForLocationPermission(permissionGranted: () -> Unit)
     }
 }
