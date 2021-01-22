@@ -1,4 +1,4 @@
-package com.rootstrap.android.ui.activity.main
+package com.rootstrap.android.ui.activity.main.authentication
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +12,7 @@ import com.rootstrap.android.metrics.Analytics
 import com.rootstrap.android.metrics.PageEvents
 import com.rootstrap.android.metrics.VISIT_SIGN_UP
 import com.rootstrap.android.network.models.User
+import com.rootstrap.android.ui.activity.main.targetpoint.TargetPointsActivity
 import com.rootstrap.android.ui.base.BaseActivity
 import com.rootstrap.android.ui.view.AuthView
 import com.rootstrap.android.util.NetworkState
@@ -28,7 +29,10 @@ class SignUpActivity : BaseActivity(), AuthView {
         setContentView(R.layout.activity_sign_up)
         Analytics.track(PageEvents.visit(VISIT_SIGN_UP))
 
-        val factory = SignUpActivityViewModelFactory(viewModelListener)
+        val factory =
+            SignUpActivityViewModelFactory(
+                viewModelListener
+            )
         viewModel = ViewModelProvider(this, factory)
             .get(SignUpActivityViewModel::class.java)
 
@@ -122,8 +126,8 @@ class SignUpActivity : BaseActivity(), AuthView {
         )
     }
 
-    override fun showProfile() {
-        startActivityClearTask(ProfileActivity())
+    override fun showMainPage() {
+        startActivityClearTask(TargetPointsActivity())
     }
 
     private fun initGenderDropDown() {
@@ -165,7 +169,7 @@ class SignUpActivity : BaseActivity(), AuthView {
     private val viewModelListener = object : ViewModelListener {
         override fun updateState() {
             when (viewModel.state) {
-                SignUpState.signUpSuccess -> showProfile()
+                SignUpState.signUpSuccess -> showMainPage()
                 SignUpState.none, SignUpState.signUpFailure -> Unit
             }
         }

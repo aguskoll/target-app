@@ -1,4 +1,4 @@
-package com.rootstrap.android.ui.activity.main
+package com.rootstrap.android.ui.activity.main.authentication
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,7 +9,7 @@ import com.rootstrap.android.network.managers.UserManager
 import com.rootstrap.android.network.models.FacebookSignIn
 import com.rootstrap.android.network.models.User
 import com.rootstrap.android.network.models.UserSerializer
-import com.rootstrap.android.ui.activity.main.SignUpActivityViewModel.Companion.MIN_CHAR_PASSWORD
+import com.rootstrap.android.ui.activity.main.authentication.SignUpActivityViewModel.Companion.MIN_CHAR_PASSWORD
 import com.rootstrap.android.ui.base.BaseViewModel
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.ViewModelListener

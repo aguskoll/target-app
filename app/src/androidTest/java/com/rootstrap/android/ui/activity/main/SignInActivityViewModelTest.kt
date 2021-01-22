@@ -1,6 +1,7 @@
 package com.rootstrap.android.ui.activity.main
 
 import com.rootstrap.android.network.managers.UserManager
+import com.rootstrap.android.ui.activity.main.authentication.SignInActivityViewModel
 import com.rootstrap.android.util.ViewModelListener
 import com.rootstrap.android.utils.BaseTests
 import junit.framework.Assert.assertFalse

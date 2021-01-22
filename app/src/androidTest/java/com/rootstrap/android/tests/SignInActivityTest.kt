@@ -5,8 +5,8 @@ import com.google.gson.Gson
 import com.rootstrap.android.R
 import com.rootstrap.android.network.managers.SessionManager
 import com.rootstrap.android.network.models.UserSerializer
-import com.rootstrap.android.ui.activity.main.ProfileActivity
-import com.rootstrap.android.ui.activity.main.SignInActivity
+import com.rootstrap.android.ui.activity.main.authentication.ProfileActivity
+import com.rootstrap.android.ui.activity.main.authentication.SignInActivity
 import com.rootstrap.android.utils.BaseTests
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
