@@ -10,12 +10,4 @@ interface ITargetPointManager {
     suspend fun createTarget(target: Target): Result<Data<TargetPointSerializer>>
 
     suspend fun getTopics(): Result<Data<TopicsSerializer>>
-
-    fun saveUserLocation(lat: Double, lng: Double)
-
-    fun isLocationStateSuccess(): Boolean
-
-    fun getLocationLatitude(): Double
-
-    fun getLocationLongitude(): Double
 }

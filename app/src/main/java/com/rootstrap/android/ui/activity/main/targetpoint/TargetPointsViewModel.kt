@@ -1,10 +1,14 @@
 package com.rootstrap.android.ui.activity.main.targetpoint
 
+import android.content.Context
+import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.rootstrap.android.network.managers.ILocationManager
 import com.rootstrap.android.network.managers.ITargetPointManager
+import com.rootstrap.android.network.managers.LocationManager
 import com.rootstrap.android.network.managers.TargetPointManager
 import com.rootstrap.android.network.models.Target
 import com.rootstrap.android.network.models.Topic
@@ -13,7 +17,10 @@ import com.rootstrap.android.util.NetworkState
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class CreateTargetViewModel(private val targetManager: ITargetPointManager) : BaseViewModel(null) {
+class CreateTargetViewModel(
+    private val targetManager: ITargetPointManager,
+    private val locationManager: ILocationManager
+) : BaseViewModel(null) {
 
     var createTargetState: MutableLiveData<CreateTargetState> = MutableLiveData()
     var newTarget: MutableLiveData<Target> = MutableLiveData()
@@ -36,6 +43,11 @@ class CreateTargetViewModel(private val targetManager: ITargetPointManager) : Ba
         }
     }
 
+    fun getDeviceLocation(context: Context, successAction: (location: Location) -> Unit) {
+        locationManager.getDeviceLocation(context, successAction)
+    }
+
+    // TODO: show topics
     fun getTopics() {
         try {
             viewModelScope.launch {
@@ -65,22 +77,22 @@ class CreateTargetViewModel(private val targetManager: ITargetPointManager) : Ba
         error = getMessageErrorFromException(exception)
     }
 
-    fun saveUserLocation(lat: Double, lng: Double) = targetManager.saveUserLocation(lat, lng)
+    fun getLocationLatitude(): Double = locationManager.getLocationLatitude()
 
-    fun getLocationLatitude(): Double = targetManager.getLocationLatitude()
+    fun getLocationLongitude(): Double = locationManager.getLocationLongitude()
 
-    fun getLocationLongitude(): Double = targetManager.getLocationLongitude()
+    fun isLocationStateSuccess(): Boolean = locationManager.isLocationStateSuccess()
 
-    fun isLocationStateSuccess(): Boolean = targetManager.isLocationStateSuccess()
+    fun isAreaValid(area: Double): Boolean = area > 0
 
-    fun canCreateTopic(area: Double, title: String?, topic: Int): Boolean {
-        return area > 0 && title.isNullOrEmpty().not() && topic > 0
-    }
+    fun isTitleValid(title: String?): Boolean = title.isNullOrEmpty().not()
+
+    fun isTopicValid(topic: Int): Boolean = topic > 0
 }
 
 class CreateTargetViewModelViewModelFactory() : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return CreateTargetViewModel(TargetPointManager) as T
+        return CreateTargetViewModel(TargetPointManager, LocationManager) as T
     }
 }
 

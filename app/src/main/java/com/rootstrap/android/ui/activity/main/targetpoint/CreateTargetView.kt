@@ -34,10 +34,36 @@ class CreateTargetView(
         val target = Target(title, lat, lng, area, topic)
 
         if (createTargetViewModel.isLocationStateSuccess() &&
-            createTargetViewModel.canCreateTopic(area, title, topic)
+            validateUserInputs(area, title, topic)
         ) {
             createTargetViewModel.createTarget(target)
         }
+    }
+
+    private fun validateUserInputs(area: Double, title: String?, topic: Int): Boolean =
+        validateArea(area) && validateTargetTitle(title) && validateTopic(topic)
+
+    private fun validateArea(area: Double): Boolean {
+        val isAreaValid = createTargetViewModel.isAreaValid(area)
+        if (isAreaValid.not())
+            binding.root.area_text_input_layout.error = " "
+        return isAreaValid
+    }
+
+    private fun validateTargetTitle(title: String?): Boolean {
+        val isTitleValid = createTargetViewModel.isTitleValid(title)
+        if (isTitleValid.not()) {
+            binding.root.title_text_input_layout.error = " "
+        }
+        return isTitleValid
+    }
+
+    private fun validateTopic(topic: Int): Boolean {
+        val isTopicValid = createTargetViewModel.isTopicValid(topic)
+        if (isTopicValid) {
+            binding.root.topic_text_input_layout.error = ""
+        }
+        return isTopicValid
     }
 
     fun expandCollapseSheet() {

@@ -17,18 +17,4 @@ object TargetPointManager : ITargetPointManager {
 
     override suspend fun getTopics(): Result<Data<TopicsSerializer>> =
         ActionCallback.call(service.getTopics())
-
-    override fun saveUserLocation(lat: Double, lng: Double) {
-        UserLocation.latitude = lat
-        UserLocation.longitude = lng
-        UserLocation.locationState = LocationState.success
-    }
-
-    override fun isLocationStateSuccess(): Boolean {
-        return UserLocation.locationState == LocationState.success
-    }
-
-    override fun getLocationLatitude(): Double = UserLocation.latitude
-
-    override fun getLocationLongitude(): Double = UserLocation.longitude
 }

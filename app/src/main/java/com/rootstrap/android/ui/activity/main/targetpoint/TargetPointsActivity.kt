@@ -2,6 +2,7 @@ package com.rootstrap.android.ui.activity.main.targetpoint
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.rootstrap.android.R
@@ -55,6 +56,7 @@ class TargetPointsActivity : PermissionActivity(), MapFragment.MapFragmentIntera
     private fun successCreatingTarget() {
         createTargetView.expandCollapseSheet()
         hideKeyboard()
+        Toast.makeText(this, "success creating target", Toast.LENGTH_SHORT).show()
     }
 
     private fun observeNetworkState() {
