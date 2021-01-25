@@ -46,22 +46,22 @@ class CreateTargetView(
     private fun validateArea(area: Double): Boolean {
         val isAreaValid = targetPointsViewModel.isAreaValid(area)
         if (isAreaValid.not())
-            binding.root.area_text_input_layout.error = " "
+            binding.root.area_text_input_layout.error = SHOW_EMPTY_ERROR
         return isAreaValid
     }
 
     private fun validateTargetTitle(title: String?): Boolean {
         val isTitleValid = targetPointsViewModel.isTitleValid(title)
         if (isTitleValid.not()) {
-            binding.root.title_text_input_layout.error = " "
+            binding.root.title_text_input_layout.error = SHOW_EMPTY_ERROR
         }
         return isTitleValid
     }
 
     private fun validateTopic(topic: Int): Boolean {
         val isTopicValid = targetPointsViewModel.isTopicValid(topic)
-        if (isTopicValid) {
-            binding.root.topic_text_input_layout.error = ""
+        if (isTopicValid.not()) {
+            binding.root.topic_text_input_layout.error = SHOW_EMPTY_ERROR
         }
         return isTopicValid
     }
@@ -72,5 +72,9 @@ class CreateTargetView(
         } else {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
+    }
+
+    companion object {
+        const val SHOW_EMPTY_ERROR = " "
     }
 }
