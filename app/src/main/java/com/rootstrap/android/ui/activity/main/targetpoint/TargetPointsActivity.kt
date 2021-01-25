@@ -54,7 +54,7 @@ class TargetPointsActivity : BaseActivity() {
     private fun successCreatingTarget() {
         createTargetView.expandCollapseSheet()
         hideKeyboard()
-        Toast.makeText(this, "success creating target", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.success_creating_target), Toast.LENGTH_LONG).show()
     }
 
     private fun observeNetworkState() {

@@ -24,7 +24,9 @@ class ErrorUtil {
                     message = when {
                         errors.containsKey(FULL_MESSAGES) -> errors.getValue(FULL_MESSAGES).first()
                         errors.containsKey(TOPIC) -> TOPIC + ": " + errors.getValue(TOPIC).first()
-                        else -> ""
+                        else -> if (errors.values.isNotEmpty() && errors.values.first().isNotEmpty())
+                            errors.values.first().first()
+                        else ""
                     }
                 }
             } else if (error.error != null && !error.error.isEmpty()) {

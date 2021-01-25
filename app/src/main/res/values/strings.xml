@@ -65,4 +65,5 @@
     <string name="choose_a_title_for_your_target">Choose a title for your target</string>
     <string name="save_target_btn">save target</string>
     <string name="m"> m</string>
+    <string name="success_creating_target">Success creating target</string>
 </resources>
