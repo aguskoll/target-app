@@ -96,6 +96,8 @@ enum class SignUpState {
 
 class SignUpActivityViewModelFactory(var listener: ViewModelListener?) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return SignUpActivityViewModel(listener) as T
+        return SignUpActivityViewModel(
+            listener
+        ) as T
     }
 }
