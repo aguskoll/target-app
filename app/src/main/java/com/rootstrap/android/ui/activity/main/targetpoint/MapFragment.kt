@@ -27,7 +27,7 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var binding: FragmentMapBinding
-    private lateinit var createTargetViewModel: CreateTargetViewModel
+    private lateinit var targetPointsViewModel: TargetPointsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +41,7 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
     ): View? {
         binding = FragmentMapBinding.inflate(layoutInflater, container, false)
         val factory = CreateTargetViewModelViewModelFactory()
-        createTargetViewModel = ViewModelProvider(this, factory).get(CreateTargetViewModel::class.java)
+        targetPointsViewModel = ViewModelProvider(this, factory).get(TargetPointsViewModel::class.java)
         return binding.root
     }
 
@@ -69,7 +69,7 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
     private fun getDeviceLocation() {
         try {
             mMap.isMyLocationEnabled = true
-            createTargetViewModel.getDeviceLocation(requireContext()) { location ->
+            targetPointsViewModel.getDeviceLocation(requireContext()) { location ->
                 with(location) {
                     addMarker(latitude, longitude)
                 }

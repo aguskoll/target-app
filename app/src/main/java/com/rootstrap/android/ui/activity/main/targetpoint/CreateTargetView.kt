@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.fragment_create_target.view.*
 
 class CreateTargetView(
     private val binding: ActivityTargetPointsBinding,
-    private val createTargetViewModel: CreateTargetViewModel
+    private val targetPointsViewModel: TargetPointsViewModel
 ) {
 
     private val bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout> =
@@ -21,7 +21,7 @@ class CreateTargetView(
         binding.root.save_target_btn.setOnClickListener {
             createTarget()
         }
-        createTargetViewModel.getTopics()
+        targetPointsViewModel.getTopics()
     }
 
     // TODO: show real topics and handle selection
@@ -29,14 +29,14 @@ class CreateTargetView(
         val title = binding.root.title_edit_text.value()
         val area: Double = binding.root.area_edit_text.value().toDoubleOrNull() ?: 0.0
         val topic: Int = binding.root.topic_edit_text.value().toIntOrNull() ?: 0
-        val lat = createTargetViewModel.getLocationLatitude()
-        val lng = createTargetViewModel.getLocationLongitude()
+        val lat = targetPointsViewModel.getLocationLatitude()
+        val lng = targetPointsViewModel.getLocationLongitude()
         val target = Target(title, lat, lng, area, topic)
 
-        if (createTargetViewModel.isLocationStateSuccess() &&
+        if (targetPointsViewModel.isLocationStateSuccess() &&
             validateUserInputs(area, title, topic)
         ) {
-            createTargetViewModel.createTarget(target)
+            targetPointsViewModel.createTarget(target)
         }
     }
 
@@ -44,14 +44,14 @@ class CreateTargetView(
         validateArea(area) && validateTargetTitle(title) && validateTopic(topic)
 
     private fun validateArea(area: Double): Boolean {
-        val isAreaValid = createTargetViewModel.isAreaValid(area)
+        val isAreaValid = targetPointsViewModel.isAreaValid(area)
         if (isAreaValid.not())
             binding.root.area_text_input_layout.error = " "
         return isAreaValid
     }
 
     private fun validateTargetTitle(title: String?): Boolean {
-        val isTitleValid = createTargetViewModel.isTitleValid(title)
+        val isTitleValid = targetPointsViewModel.isTitleValid(title)
         if (isTitleValid.not()) {
             binding.root.title_text_input_layout.error = " "
         }
@@ -59,7 +59,7 @@ class CreateTargetView(
     }
 
     private fun validateTopic(topic: Int): Boolean {
-        val isTopicValid = createTargetViewModel.isTopicValid(topic)
+        val isTopicValid = targetPointsViewModel.isTopicValid(topic)
         if (isTopicValid) {
             binding.root.topic_text_input_layout.error = ""
         }

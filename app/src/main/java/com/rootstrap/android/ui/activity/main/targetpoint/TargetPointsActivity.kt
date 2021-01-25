@@ -18,7 +18,7 @@ class TargetPointsActivity : BaseActivity() {
 
     private lateinit var createTargetView: CreateTargetView
 
-    private lateinit var createTargetViewModel: CreateTargetViewModel
+    private lateinit var targetPointsViewModel: TargetPointsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class TargetPointsActivity : BaseActivity() {
         setContentView(binding.root)
 
         val factory = CreateTargetViewModelViewModelFactory()
-        createTargetViewModel = ViewModelProvider(this, factory).get(CreateTargetViewModel::class.java)
+        targetPointsViewModel = ViewModelProvider(this, factory).get(TargetPointsViewModel::class.java)
 
         observeCreateTargetState()
 
@@ -37,10 +37,10 @@ class TargetPointsActivity : BaseActivity() {
     }
 
     private fun observeCreateTargetState() {
-        createTargetViewModel.createTargetState.observe(this, Observer { targetState ->
+        targetPointsViewModel.createTargetState.observe(this, Observer { targetState ->
             targetState?.run {
                 when (this) {
-                    CreateTargetState.fail -> showError(createTargetViewModel.error ?: getString(R.string.default_error))
+                    CreateTargetState.fail -> showError(targetPointsViewModel.error ?: getString(R.string.default_error))
                     CreateTargetState.success -> {
                         successCreatingTarget()
                     }
@@ -50,7 +50,7 @@ class TargetPointsActivity : BaseActivity() {
         })
     }
 
-    // TODO: show target in map
+    // TODO: show target in map and remove toast
     private fun successCreatingTarget() {
         createTargetView.expandCollapseSheet()
         hideKeyboard()
@@ -58,7 +58,7 @@ class TargetPointsActivity : BaseActivity() {
     }
 
     private fun observeNetworkState() {
-        createTargetViewModel.networkStateObservable.observe(this, Observer { state ->
+        targetPointsViewModel.networkStateObservable.observe(this, Observer { state ->
             state?.run {
                 when (state) {
                     NetworkState.loading -> showProgress()
@@ -87,7 +87,7 @@ class TargetPointsActivity : BaseActivity() {
     }
 
     private fun initCreateTargetView() {
-        createTargetView = CreateTargetView(binding, createTargetViewModel)
+        createTargetView = CreateTargetView(binding, targetPointsViewModel)
         binding.goToTargetContainer.setOnClickListener {
             createTargetView.expandCollapseSheet()
         }

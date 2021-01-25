@@ -4,7 +4,7 @@ import android.content.Context
 import android.location.Location
 
 interface ILocationManager {
-    fun saveUserLocation(lat: Double, lng: Double)
+    fun saveDeviceLocation(lat: Double, lng: Double)
 
     fun isLocationStateSuccess(): Boolean
 
@@ -12,5 +12,5 @@ interface ILocationManager {
 
     fun getLocationLongitude(): Double
 
-    fun getDeviceLocation(context: Context, successAction: (location: Location) -> Unit)
+    fun getDeviceLocation(context: Context, successActionCallback: (location: Location) -> Unit)
 }

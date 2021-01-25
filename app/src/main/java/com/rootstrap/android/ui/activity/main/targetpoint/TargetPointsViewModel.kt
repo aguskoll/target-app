@@ -17,7 +17,7 @@ import com.rootstrap.android.util.NetworkState
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class CreateTargetViewModel(
+class TargetPointsViewModel(
     private val targetManager: ITargetPointManager,
     private val locationManager: ILocationManager
 ) : BaseViewModel(null) {
@@ -92,7 +92,7 @@ class CreateTargetViewModel(
 
 class CreateTargetViewModelViewModelFactory() : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return CreateTargetViewModel(TargetPointManager, LocationManager) as T
+        return TargetPointsViewModel(TargetPointManager, LocationManager) as T
     }
 }
 

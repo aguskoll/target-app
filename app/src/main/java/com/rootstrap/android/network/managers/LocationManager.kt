@@ -16,7 +16,7 @@ object LocationManager : ILocationManager {
         try {
             fusedLocationClient?.lastLocation?.addOnSuccessListener { location ->
                 location?.run {
-                    saveUserLocation(longitude, latitude)
+                    saveDeviceLocation(longitude, latitude)
                     successActionCallback(location)
                 }
             }
@@ -25,7 +25,7 @@ object LocationManager : ILocationManager {
         }
     }
 
-    override fun saveUserLocation(lat: Double, lng: Double) {
+    override fun saveDeviceLocation(lat: Double, lng: Double) {
         UserLocation.latitude = lat
         UserLocation.longitude = lng
         UserLocation.locationState = LocationState.success
