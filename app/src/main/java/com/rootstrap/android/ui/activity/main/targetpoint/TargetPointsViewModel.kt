@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.rootstrap.android.network.managers.ILocationManager
-import com.rootstrap.android.network.managers.ITargetPointManager
+import com.rootstrap.android.network.services.ITargetPointService
 import com.rootstrap.android.network.managers.LocationManager
-import com.rootstrap.android.network.managers.TargetPointManager
+import com.rootstrap.android.network.services.TargetPointService
 import com.rootstrap.android.network.models.Target
 import com.rootstrap.android.network.models.Topic
 import com.rootstrap.android.ui.base.BaseViewModel
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 class TargetPointsViewModel(
-    private val targetManager: ITargetPointManager,
+    private val targetService: ITargetPointService,
     private val locationManager: ILocationManager
 ) : BaseViewModel(null) {
 
@@ -30,7 +30,7 @@ class TargetPointsViewModel(
         try {
             networkStateObservable.postValue(NetworkState.loading)
             viewModelScope.launch {
-                val result = targetManager.createTarget(target)
+                val result = targetService.createTarget(target)
                 if (result.isSuccess) {
                     handleSuccess(result.getOrNull()?.value?.target)
                 } else {
@@ -51,7 +51,7 @@ class TargetPointsViewModel(
     fun getTopics() {
         try {
             viewModelScope.launch {
-                val result = targetManager.getTopics()
+                val result = targetService.getTopics()
                 if (result.isSuccess) {
                     val topics: List<Topic> = result.getOrNull()?.value?.topics ?: emptyList()
                 } else {
@@ -92,7 +92,7 @@ class TargetPointsViewModel(
 
 class CreateTargetViewModelViewModelFactory() : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return TargetPointsViewModel(TargetPointManager, LocationManager) as T
+        return TargetPointsViewModel(TargetPointService, LocationManager) as T
     }
 }
 

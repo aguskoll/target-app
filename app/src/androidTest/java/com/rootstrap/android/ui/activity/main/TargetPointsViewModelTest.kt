@@ -1,7 +1,7 @@
 package com.rootstrap.android.ui.activity.main
 
 import com.rootstrap.android.network.managers.LocationManager
-import com.rootstrap.android.network.managers.TargetPointManager
+import com.rootstrap.android.network.services.TargetPointService
 import com.rootstrap.android.ui.activity.main.targetpoint.TargetPointsViewModel
 import com.rootstrap.android.utils.BaseTests
 import junit.framework.Assert
@@ -11,7 +11,7 @@ import org.junit.Test
 
 class TargetPointsViewModelTest : BaseTests() {
 
-    private val targetPointsViewModel: TargetPointsViewModel = TargetPointsViewModel(TargetPointManager, LocationManager)
+    private val targetPointsViewModel: TargetPointsViewModel = TargetPointsViewModel(TargetPointService, LocationManager)
 
     @Before
     fun setUp() {

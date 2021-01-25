@@ -1,14 +1,13 @@
-package com.rootstrap.android.network.managers
+package com.rootstrap.android.network.services
 
 import com.rootstrap.android.network.models.Target
 import com.rootstrap.android.network.models.TargetPointSerializer
 import com.rootstrap.android.network.models.TopicsSerializer
 import com.rootstrap.android.network.providers.ServiceProvider
-import com.rootstrap.android.network.services.ApiService
 import com.rootstrap.android.util.extensions.ActionCallback
 import com.rootstrap.android.util.extensions.Data
 
-object TargetPointManager : ITargetPointManager {
+object TargetPointService : ITargetPointService {
 
     private var service = ServiceProvider.create(ApiService::class.java)
 
