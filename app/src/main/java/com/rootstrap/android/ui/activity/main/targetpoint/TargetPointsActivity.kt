@@ -2,12 +2,12 @@ package com.rootstrap.android.ui.activity.main.targetpoint
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.ActivityTargetPointsBinding
 import com.rootstrap.android.ui.activity.main.authentication.ProfileActivity
+import com.rootstrap.android.ui.base.BaseActivity
 
-class TargetPointsActivity : AppCompatActivity() {
+class TargetPointsActivity : BaseActivity() {
 
     private lateinit var binding: ActivityTargetPointsBinding
 
