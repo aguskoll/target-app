@@ -58,4 +58,6 @@
 
     <include layout="@layout/fragment_create_target"/>
 
+    <include layout="@layout/layout_topics" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

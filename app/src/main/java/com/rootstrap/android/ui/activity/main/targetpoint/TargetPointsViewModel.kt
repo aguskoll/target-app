@@ -2,16 +2,18 @@ package com.rootstrap.android.ui.activity.main.targetpoint
 
 import android.content.Context
 import android.location.Location
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.rootstrap.android.network.managers.ILocationManager
-import com.rootstrap.android.network.services.ITargetPointService
 import com.rootstrap.android.network.managers.LocationManager
-import com.rootstrap.android.network.services.TargetPointService
 import com.rootstrap.android.network.models.Target
 import com.rootstrap.android.network.models.Topic
+import com.rootstrap.android.network.models.TopicSerializer
+import com.rootstrap.android.network.services.ITargetPointService
+import com.rootstrap.android.network.services.TargetPointService
 import com.rootstrap.android.ui.base.BaseViewModel
 import com.rootstrap.android.util.NetworkState
 import kotlinx.coroutines.launch
@@ -25,6 +27,7 @@ class TargetPointsViewModel(
     var createTargetState: MutableLiveData<CreateTargetState> = MutableLiveData()
     var newTarget: MutableLiveData<Target> = MutableLiveData()
     var networkStateObservable: MutableLiveData<NetworkState> = MutableLiveData()
+    var topics: MutableLiveData<List<Topic>> = MutableLiveData()
 
     fun createTarget(target: Target) {
         try {
@@ -47,13 +50,13 @@ class TargetPointsViewModel(
         locationManager.getDeviceLocation(context, successAction)
     }
 
-    // TODO: show topics
-    fun getTopics() {
+    fun getTopics(): LiveData<List<Topic>> {
         try {
             viewModelScope.launch {
                 val result = targetService.getTopics()
                 if (result.isSuccess) {
-                    val topics: List<Topic> = result.getOrNull()?.value?.topics ?: emptyList()
+                    val topicsSerializer: List<TopicSerializer> = result.getOrNull()?.value?.topics ?: emptyList()
+                    topics.postValue(topicsSerializer.map { it.topic })
                 } else {
                     handleError(result.exceptionOrNull())
                 }
@@ -61,6 +64,7 @@ class TargetPointsViewModel(
         } catch (exception: IOException) {
             exception.printStackTrace()
         }
+        return topics
     }
 
     private fun handleSuccess(target: Target?) {

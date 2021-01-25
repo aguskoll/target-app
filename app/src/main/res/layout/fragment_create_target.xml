@@ -102,9 +102,11 @@
             android:id="@+id/topic_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="none"
             android:gravity="center"
             android:textStyle="bold"
+            android:clickable="false"
+            android:focusable="false"
             android:hint="@string/what_do_you_want_to_talk"/>
 
     </com.google.android.material.textfield.TextInputLayout>
