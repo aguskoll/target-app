@@ -2,6 +2,9 @@ package com.rootstrap.android.ui.activity.main.targetpoint
 
 import android.text.Editable
 import android.view.View
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.AlphaAnimation
+import android.view.animation.DecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -14,7 +17,6 @@ import com.rootstrap.android.network.models.Topic
 import com.rootstrap.android.ui.adapter.TopicAdapter
 import com.rootstrap.android.util.extensions.value
 import kotlinx.android.synthetic.main.fragment_create_target.view.*
-
 import kotlinx.android.synthetic.main.layout_topics.view.*
 
 class CreateTargetView(
@@ -31,22 +33,21 @@ class CreateTargetView(
 
     private lateinit var topicAdapter: TopicAdapter
 
-    private lateinit var selectedTopic: Topic
+    private var selectedTopic: Topic? = null
 
     init {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.peekHeight = TargetPointsActivity.PICK_HEIGHT_HIDDEN
 
-        topicsBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        topicsBottomSheetBehavior.peekHeight = TargetPointsActivity.PICK_HEIGHT_HIDDEN
+        initTopicsBottomSheet()
 
         binding.root.topic_edit_text.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
             if (hasFocus)
-                expandCollapseSelectTopic()
+                expandTopic()
         }
 
         binding.root.topic_edit_text.setOnClickListener {
-            expandCollapseSelectTopic()
+            expandTopic()
         }
 
         binding.root.save_target_btn.setOnClickListener {
@@ -56,6 +57,49 @@ class CreateTargetView(
         targetPointsViewModel.getTopics().observe(lifecycleOwner, Observer {
             initTopics(it)
         })
+    }
+
+    private fun initTopicsBottomSheet() {
+        topicsBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        topicsBottomSheetBehavior.peekHeight = TargetPointsActivity.PICK_HEIGHT_HIDDEN
+
+        topicsBottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        showSearchToolbar()
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                        hideSearchToolbar()
+                    }
+                    else -> Unit
+                }
+            }
+        })
+    }
+
+    private fun showSearchToolbar() {
+        val fadeIn = AlphaAnimation(0f, 1f)
+        fadeIn.interpolator = DecelerateInterpolator()
+        fadeIn.duration = ANIMATION_DURATION
+        binding.root.search_toolbar.animation = fadeIn
+        binding.root.search_toolbar.visibility = View.VISIBLE
+
+        fadeIn.startNow()
+    }
+
+    private fun hideSearchToolbar() {
+        hideKeyboard(binding.root.context, binding.root)
+        val fadeOut = AlphaAnimation(1f, 0f)
+        fadeOut.interpolator = AccelerateInterpolator()
+        fadeOut.duration = 100L
+        binding.root.search_toolbar.animation = fadeOut
+
+        binding.root.search_toolbar.visibility = View.GONE
+
+        fadeOut.startNow()
     }
 
     private fun initTopics(topics: List<Topic>) {
@@ -71,13 +115,13 @@ class CreateTargetView(
     private fun selectedTopic(topic: Topic) {
         selectedTopic = topic
         binding.root.topic_edit_text.text = Editable.Factory.getInstance().newEditable(topic.label)
-        expandCollapseSelectTopic()
+        collapseTopic()
     }
 
     private fun createTarget() {
         val title = binding.root.title_edit_text.value()
         val area: Double = binding.root.area_edit_text.value().toDoubleOrNull() ?: 0.0
-        val topic: Int = selectedTopic.id
+        val topic: Int = selectedTopic?.id ?: 0
         val lat = targetPointsViewModel.getLocationLatitude()
         val lng = targetPointsViewModel.getLocationLongitude()
         val target = Target(title, lat, lng, area, topic)
@@ -123,16 +167,17 @@ class CreateTargetView(
         }
     }
 
-    private fun expandCollapseSelectTopic() {
-        if (topicsBottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
-            topicsBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            hideKeyboard(binding.root.context, binding.root)
-        } else {
-            topicsBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
+    private fun expandTopic() {
+        topicsBottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        topicsBottomSheetBehavior.halfExpandedRatio = 0.75f
+    }
+
+    private fun collapseTopic() {
+        topicsBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     companion object {
         const val SHOW_EMPTY_ERROR = " "
+        const val ANIMATION_DURATION = 500L
     }
 }
