@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/icon_topic"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/dimen_topic_icon"
+        android:layout_height="@dimen/dimen_topic_icon"
         android:layout_marginStart="@dimen/margin_normal_20"
         android:layout_marginTop="@dimen/margin_small_8"
         android:src="@drawable/ic_target"
@@ -31,7 +31,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/height_separator"
         app:layout_constraintTop_toBottomOf="@+id/icon_topic"
         android:background="@android:color/black"
         android:layout_marginTop="@dimen/margin_small_8"

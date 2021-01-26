@@ -51,11 +51,15 @@ class CreateTargetView(
             createTarget()
         }
 
+        getTopics()
+
+        initTopicsFilter()
+    }
+
+    private fun getTopics() {
         targetPointsViewModel.getTopics().observe(lifecycleOwner, Observer {
             initTopicList(it)
         })
-
-        filterTopics()
     }
 
     private fun initTopicsBottomSheet() {
@@ -147,7 +151,7 @@ class CreateTargetView(
         topicsBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
-    private fun filterTopics() {
+    private fun initTopicsFilter() {
         binding.root.filter_edit_text.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (s?.length ?: 0 >= MIN_CHAR_FILTER) {
