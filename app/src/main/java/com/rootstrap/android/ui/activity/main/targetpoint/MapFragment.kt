@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -28,7 +27,7 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var binding: FragmentMapBinding
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var targetPointsViewModel: TargetPointsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +40,8 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(layoutInflater, container, false)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        val factory = CreateTargetViewModelViewModelFactory()
+        targetPointsViewModel = ViewModelProvider(this, factory).get(TargetPointsViewModel::class.java)
         return binding.root
     }
 
@@ -69,8 +69,8 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
     private fun getDeviceLocation() {
         try {
             mMap.isMyLocationEnabled = true
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                location?.run {
+            targetPointsViewModel.getDeviceLocation(requireContext()) { location ->
+                with(location) {
                     addMarker(latitude, longitude)
                 }
             }

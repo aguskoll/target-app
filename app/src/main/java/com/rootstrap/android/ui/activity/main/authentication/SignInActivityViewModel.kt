@@ -13,8 +13,6 @@ import com.rootstrap.android.ui.activity.main.authentication.SignUpActivityViewM
 import com.rootstrap.android.ui.base.BaseViewModel
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.ViewModelListener
-import com.rootstrap.android.util.extensions.ApiErrorType
-import com.rootstrap.android.util.extensions.ApiException
 import com.rootstrap.android.util.extensions.Data
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -75,10 +73,7 @@ open class SignInActivityViewModel(
     }
 
     private fun handleError(exception: Throwable?) {
-        error = if (exception is ApiException && exception.errorType == ApiErrorType.apiError) {
-            exception.message
-        } else null
-
+        error = getMessageErrorFromException(exception)
         networkState = NetworkState.idle
         networkState = NetworkState.error
         state = SignInState.signInFailure
