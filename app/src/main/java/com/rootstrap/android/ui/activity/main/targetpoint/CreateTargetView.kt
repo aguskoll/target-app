@@ -2,15 +2,11 @@ package com.rootstrap.android.ui.activity.main.targetpoint
 
 import android.text.Editable
 import android.view.View
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.AlphaAnimation
-import android.view.animation.DecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.firebase.crashlytics.internal.common.CommonUtils.hideKeyboard
 import com.rootstrap.android.databinding.ActivityTargetPointsBinding
 import com.rootstrap.android.network.models.Target
 import com.rootstrap.android.network.models.Topic
@@ -64,42 +60,12 @@ class CreateTargetView(
         topicsBottomSheetBehavior.peekHeight = TargetPointsActivity.PICK_HEIGHT_HIDDEN
 
         topicsBottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
-
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when (newState) {
-                    BottomSheetBehavior.STATE_EXPANDED -> {
-                        showSearchToolbar()
-                    }
-                    BottomSheetBehavior.STATE_DRAGGING -> {
-                        hideSearchToolbar()
-                    }
-                    else -> Unit
-                }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                binding.root.select_topic_layout.progress = slideOffset
             }
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) = Unit
         })
-    }
-
-    private fun showSearchToolbar() {
-        val fadeIn = AlphaAnimation(0f, 1f)
-        fadeIn.interpolator = DecelerateInterpolator()
-        fadeIn.duration = ANIMATION_DURATION
-        binding.root.search_toolbar.animation = fadeIn
-        binding.root.search_toolbar.visibility = View.VISIBLE
-
-        fadeIn.startNow()
-    }
-
-    private fun hideSearchToolbar() {
-        hideKeyboard(binding.root.context, binding.root)
-        val fadeOut = AlphaAnimation(1f, 0f)
-        fadeOut.interpolator = AccelerateInterpolator()
-        fadeOut.duration = 100L
-        binding.root.search_toolbar.animation = fadeOut
-
-        binding.root.search_toolbar.visibility = View.GONE
-
-        fadeOut.startNow()
     }
 
     private fun initTopics(topics: List<Topic>) {
@@ -169,7 +135,7 @@ class CreateTargetView(
 
     private fun expandTopic() {
         topicsBottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-        topicsBottomSheetBehavior.halfExpandedRatio = 0.75f
+        topicsBottomSheetBehavior.halfExpandedRatio = 0.70f
     }
 
     private fun collapseTopic() {
@@ -178,6 +144,5 @@ class CreateTargetView(
 
     companion object {
         const val SHOW_EMPTY_ERROR = " "
-        const val ANIMATION_DURATION = 500L
     }
 }
