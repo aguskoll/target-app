@@ -84,6 +84,8 @@ class CreateTargetView(
     private fun selectedTopic(topic: Topic) {
         selectedTopic = topic
         binding.root.topic_edit_text.text = Editable.Factory.getInstance().newEditable(topic.label)
+        topicAdapter.clearFilter()
+        binding.root.filter_edit_text.text = Editable.Factory.getInstance().newEditable("")
         collapseTopic()
     }
 
