@@ -11,9 +11,16 @@ import com.rootstrap.android.network.models.Topic
 import com.rootstrap.android.util.extensions.inflate
 
 class TopicAdapter(
-    private val topics: List<Topic>,
+    private var topics: List<Topic>,
     private val onItemSelected: (Topic) -> Unit
 ) : RecyclerView.Adapter<TopicViewHolder>() {
+
+    val itemsCopy = mutableListOf<Topic>()
+
+    init {
+        itemsCopy.addAll(topics)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicViewHolder {
         val view = parent.inflate(R.layout.item_topic)
         return TopicViewHolder(view)
@@ -21,6 +28,16 @@ class TopicAdapter(
 
     override fun getItemCount(): Int {
         return topics.size
+    }
+
+    fun filter(text: String) {
+        topics = itemsCopy.filter { it.label.toLowerCase().contains(text) }
+        notifyDataSetChanged()
+    }
+
+    fun clearFilter() {
+        topics = itemsCopy
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: TopicViewHolder, position: Int) {

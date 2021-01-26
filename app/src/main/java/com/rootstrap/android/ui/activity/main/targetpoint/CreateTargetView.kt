@@ -1,6 +1,7 @@
 package com.rootstrap.android.ui.activity.main.targetpoint
 
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
@@ -51,8 +52,10 @@ class CreateTargetView(
         }
 
         targetPointsViewModel.getTopics().observe(lifecycleOwner, Observer {
-            initTopics(it)
+            initTopicList(it)
         })
+
+        filterTopics()
     }
 
     private fun initTopicsBottomSheet() {
@@ -68,7 +71,7 @@ class CreateTargetView(
         })
     }
 
-    private fun initTopics(topics: List<Topic>) {
+    private fun initTopicList(topics: List<Topic>) {
         topicAdapter = TopicAdapter(topics) {
             selectedTopic(it)
         }
@@ -142,7 +145,24 @@ class CreateTargetView(
         topicsBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
+    private fun filterTopics() {
+        binding.root.filter_edit_text.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (s?.length ?: 0 >= MIN_CHAR_FILTER) {
+                    topicAdapter.filter(s.toString())
+                } else if (s?.length ?: 0 == 0) {
+                    topicAdapter.clearFilter()
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+        })
+    }
+
     companion object {
         const val SHOW_EMPTY_ERROR = " "
+        const val MIN_CHAR_FILTER = 3
     }
 }
