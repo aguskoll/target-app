@@ -2,6 +2,7 @@ package com.rootstrap.android.network.services
 
 import com.rootstrap.android.network.models.FacebookSignIn
 import com.rootstrap.android.network.models.TargetPointSerializer
+import com.rootstrap.android.network.models.TargetsSerializer
 import com.rootstrap.android.network.models.TopicsSerializer
 import com.rootstrap.android.network.models.UserSerializer
 import retrofit2.Call
@@ -29,4 +30,7 @@ interface ApiService {
 
     @GET("topics")
     fun getTopics(): Call<TopicsSerializer>
+
+    @GET("targets")
+    fun getTargets(): Call<TargetsSerializer>
 }

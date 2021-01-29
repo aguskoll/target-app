@@ -9,8 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.rootstrap.android.databinding.ActivityTargetPointsBinding
+import com.rootstrap.android.models.TopicModel
 import com.rootstrap.android.network.models.Target
-import com.rootstrap.android.network.models.Topic
 import com.rootstrap.android.ui.adapter.TopicAdapter
 import com.rootstrap.android.util.extensions.value
 import kotlinx.android.synthetic.main.fragment_create_target.view.*
@@ -32,7 +32,7 @@ class CreateTargetView(
 
     private lateinit var topicAdapter: TopicAdapter
 
-    private var selectedTopic: Topic? = null
+    private var selectedTopic: TopicModel? = null
 
     init {
 
@@ -83,7 +83,7 @@ class CreateTargetView(
         }
     }
 
-    private fun initTopicList(topics: List<Topic>) {
+    private fun initTopicList(topics: List<TopicModel>) {
         topicAdapter = TopicAdapter(topics) {
             selectedTopic(it)
         }
@@ -93,7 +93,7 @@ class CreateTargetView(
         }
     }
 
-    private fun selectedTopic(topic: Topic) {
+    private fun selectedTopic(topic: TopicModel) {
         selectedTopic = topic
         with(bindingRoot) {
             topic_edit_text.text = Editable.Factory.getInstance().newEditable(topic.label)
