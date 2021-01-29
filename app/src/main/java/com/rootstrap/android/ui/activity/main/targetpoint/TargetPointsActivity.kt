@@ -52,7 +52,7 @@ class TargetPointsActivity : BaseActivity() {
 
     // TODO: show target in map and remove toast
     private fun successCreatingTarget() {
-        createTargetView.expandCollapseSheet()
+        createTargetView.expandCollapseCreateTargetSheet()
         hideKeyboard()
         Toast.makeText(this, getString(R.string.success_creating_target), Toast.LENGTH_LONG).show()
     }
@@ -87,9 +87,9 @@ class TargetPointsActivity : BaseActivity() {
     }
 
     private fun initCreateTargetView() {
-        createTargetView = CreateTargetView(binding, targetPointsViewModel)
+        createTargetView = CreateTargetView(binding, targetPointsViewModel, this)
         binding.goToTargetContainer.setOnClickListener {
-            createTargetView.expandCollapseSheet()
+            createTargetView.expandCollapseCreateTargetSheet()
         }
     }
 

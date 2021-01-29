@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/topic_container"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?android:attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/icon_topic"
+        android:layout_width="@dimen/dimen_topic_icon"
+        android:layout_height="@dimen/dimen_topic_icon"
+        android:layout_marginStart="@dimen/margin_normal_20"
+        android:layout_marginTop="@dimen/margin_small_8"
+        android:src="@drawable/ic_target"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/name_topic_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_normal_16"
+        tools:text="Travel"
+        app:layout_constraintBottom_toBottomOf="@+id/icon_topic"
+        app:layout_constraintTop_toTopOf="@id/icon_topic"
+        app:layout_constraintStart_toEndOf="@id/icon_topic"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_14"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_separator"
+        app:layout_constraintTop_toBottomOf="@+id/icon_topic"
+        android:background="@android:color/black"
+        android:layout_marginTop="@dimen/margin_small_8"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
