@@ -195,6 +195,12 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
         })
     }
 
+    private fun observeNewTargets() {
+        targetPointsViewModel.newTarget.observe(viewLifecycleOwner, Observer {
+            addCircleMarkerForTarget(it)
+        })
+    }
+
     companion object {
         const val GOOGLE_MAPS_ZOOM = 15f
         const val GOOGLE_MAPS_BEARING = 0f

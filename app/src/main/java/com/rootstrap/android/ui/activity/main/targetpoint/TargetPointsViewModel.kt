@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.rootstrap.android.models.TargetModel
 import com.rootstrap.android.models.TopicModel
+import com.rootstrap.android.models.mapToTargetRequest
 import com.rootstrap.android.network.managers.ILocationManager
 import com.rootstrap.android.network.managers.LocationManager
 import com.rootstrap.android.network.models.Target
@@ -27,18 +28,18 @@ class TargetPointsViewModel(
 ) : BaseViewModel(null) {
 
     var createTargetState: MutableLiveData<CreateTargetState> = MutableLiveData()
-    var newTarget: MutableLiveData<Target> = MutableLiveData()
+    var newTarget: MutableLiveData<TargetModel> = MutableLiveData()
     var networkStateObservable: MutableLiveData<NetworkState> = MutableLiveData()
     var topics: MutableLiveData<List<TopicModel>> = MutableLiveData()
     val targets: MutableLiveData<List<TargetModel>> = MutableLiveData()
 
-    fun createTarget(target: Target) {
+    fun createTarget(targetModel: TargetModel) {
         try {
             networkStateObservable.postValue(NetworkState.loading)
             viewModelScope.launch {
-                val result = targetService.createTarget(target)
+                val result = targetService.createTarget(targetModel.mapToTargetRequest())
                 if (result.isSuccess) {
-                    handleSuccess(result.getOrNull()?.value?.target)
+                    handleSuccess(result.getOrNull()?.value?.target?.mapToModel(targetModel.topic))
                 } else {
                     handleError(result.exceptionOrNull())
                 }
@@ -94,7 +95,7 @@ class TargetPointsViewModel(
         }
     }
 
-    private fun handleSuccess(target: Target?) {
+    private fun handleSuccess(target: TargetModel?) {
         createTargetState.postValue(CreateTargetState.success)
         networkStateObservable.postValue(NetworkState.idle)
         target?.let {
@@ -118,7 +119,7 @@ class TargetPointsViewModel(
 
     fun isTitleValid(title: String?): Boolean = title.isNullOrEmpty().not()
 
-    fun isTopicValid(topic: Int): Boolean = topic > 0
+    fun isTopicValid(topic: TopicModel?): Boolean = topic != null
 }
 
 class CreateTargetViewModelViewModelFactory() : ViewModelProvider.Factory {
