@@ -96,7 +96,7 @@ class CreateTargetView(
     private fun selectedTopic(topic: TopicModel) {
         selectedTopic = topic
         with(bindingRoot) {
-            topic_edit_text.text = Editable.Factory.getInstance().newEditable(topic.label)
+            topic_edit_text.text = Editable.Factory.getInstance().newEditable(topic.label.name.capitalize())
             topicAdapter.clearFilter()
             filter_edit_text.text = Editable.Factory.getInstance().newEditable("")
         }

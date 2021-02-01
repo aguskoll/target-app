@@ -60,7 +60,7 @@ class TargetPointsViewModel(
                 val result = targetService.getTopics()
                 if (result.isSuccess) {
                     val topicsSerializer: List<TopicSerializer> = result.getOrNull()?.value?.topics ?: emptyList()
-                    val topicsModel: List<TopicModel> = topicsSerializer.map { it.topic }.map { it.mapToModel() }
+                    val topicsModel: List<TopicModel> = topicsSerializer.map { it.topic }.mapNotNull { it.mapToModel() }
                     getTargets(topicsModel)
                     topics.postValue(topicsModel)
                 } else {
@@ -83,7 +83,7 @@ class TargetPointsViewModel(
 
                     val targetsModels =
                         values.map { target ->
-                            target.mapToModel(topics.firstOrNull { topic -> target.topic_id == topic.id })
+                            target.mapToModel(topics.firstOrNull { topic -> target.topic_id == topic?.id })
                         }
                     targets.postValue(targetsModels)
                 } else {

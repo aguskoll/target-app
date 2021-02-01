@@ -2,26 +2,21 @@ package com.rootstrap.android.util.extensions
 
 import com.rootstrap.android.R
 import com.rootstrap.android.models.TopicModel
+import com.rootstrap.android.models.TopicTypes
 
+// todo replace chess and mate icon for the corresponding icon
 fun TopicModel.getIconForTarget(): Int {
-    return when (label?.toLowerCase()) {
-        FOOTBALL -> R.drawable.ic_ball
-        TRAVEL -> R.drawable.ic_world
-        POLITICS -> R.drawable.ic_politics
-        ART -> R.drawable.ic_art
-        DATING -> R.drawable.ic_dating
-        MUSIC -> R.drawable.ic_music
-        MOVIES -> R.drawable.ic_movies
-        SERIES -> R.drawable.ic_series
-        else -> R.drawable.ic_food
+    return when (label) {
+        TopicTypes.football -> R.drawable.ic_ball
+        TopicTypes.travel -> R.drawable.ic_world
+        TopicTypes.politics -> R.drawable.ic_politics
+        TopicTypes.art -> R.drawable.ic_art
+        TopicTypes.dating -> R.drawable.ic_dating
+        TopicTypes.music -> R.drawable.ic_music
+        TopicTypes.movies -> R.drawable.ic_movies
+        TopicTypes.series -> R.drawable.ic_series
+        TopicTypes.food -> R.drawable.ic_food
+        TopicTypes.chess -> R.drawable.ic_art
+        TopicTypes.mate -> R.drawable.ic_food
     }
 }
-
-const val FOOTBALL = "football"
-const val TRAVEL = "travel"
-const val POLITICS = "politics"
-const val ART = "art"
-const val DATING = "dating"
-const val MUSIC = "music"
-const val MOVIES = "movies"
-const val SERIES = "series"
