@@ -24,7 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.FragmentMapBinding
 import com.rootstrap.android.models.TargetModel
-import com.rootstrap.android.models.TopicModel
+import com.rootstrap.android.util.extensions.getIconForTarget
 import com.rootstrap.android.util.permissions.PermissionFragment
 import com.rootstrap.android.util.permissions.PermissionResponse
 import com.rootstrap.android.util.permissions.checkNotGrantedPermissions
@@ -56,6 +56,7 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeTargets()
+        observeNewTargets()
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
@@ -101,28 +102,16 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
 
     private fun addCircleMarkerForTarget(target: TargetModel) {
         val position = LatLng(target.lat, target.lng)
-        mMap.addMarker(
-            MarkerOptions()
-                .position(position)
-                .icon(bitmapDescriptorFromVector(requireContext(), getIconForTarget(target.topic)))
-        )
-    }
-
-    private fun getIconForTarget(topicModel: TopicModel?): Int {
-        return when (topicModel?.label?.toLowerCase()) {
-            "football" -> R.drawable.ic_ball
-            "travel" -> R.drawable.ic_world
-            "politics" -> R.drawable.ic_politics
-            "art" -> R.drawable.ic_art
-            "dating" -> R.drawable.ic_dating
-            "music" -> R.drawable.ic_music
-            "movies" -> R.drawable.ic_movies
-            "series" -> R.drawable.ic_series
-            else -> R.drawable.ic_food
+        target.topic?.run {
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(position)
+                    .icon(bitmapDescriptorwithOvalBackground(requireContext(), getIconForTarget()))
+            )
         }
     }
 
-    private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor? {
+    private fun bitmapDescriptorwithOvalBackground(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor? {
         val background = ContextCompat.getDrawable(context, R.drawable.bc_oval_marker)
         val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
         val backgroundWidth = background?.intrinsicWidth ?: 0
@@ -143,11 +132,13 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
 
         val canvas = Canvas(bitmap)
         background?.draw(canvas)
+
         canvas.translate(
             (backgroundWidth / 2 - drawableWidth / 2).toFloat(),
             (backgroundHeight / 2 - drawableHeight / 2).toFloat()
         )
         vectorDrawable?.draw(canvas)
+
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 

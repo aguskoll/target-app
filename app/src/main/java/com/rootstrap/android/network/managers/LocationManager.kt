@@ -16,7 +16,7 @@ object LocationManager : ILocationManager {
         try {
             fusedLocationClient?.lastLocation?.addOnSuccessListener { location ->
                 location?.run {
-                    saveDeviceLocation(longitude, latitude)
+                    saveDeviceLocation(lat = latitude, lng = longitude)
                     successActionCallback(location)
                 }
             }
