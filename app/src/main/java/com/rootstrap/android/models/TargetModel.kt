@@ -10,7 +10,7 @@ data class TargetModel(
     val topic: TopicModel? = null
 )
 
-fun TargetModel.mapToTargetRequest(): com.rootstrap.android.network.models.Target {
+fun TargetModel.mapToTargetRequest(): Target {
     return Target(
         title = title,
         lat = lat,
