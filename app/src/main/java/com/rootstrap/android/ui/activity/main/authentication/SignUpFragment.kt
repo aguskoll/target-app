@@ -47,13 +47,23 @@ class SignUpFragment : BaseFragment(), AuthView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.signUpButton.setOnClickListener { signUp() }
+
         binding.signInTextView.setOnClickListener {
             goToLogin()
         }
 
         initGenderDropDown()
         checkTextInput()
+    }
+
+    private fun goToLogin() {
+        binding.root.findNavController().navigateUp()
+    }
+
+    override fun showMainPage() {
+        binding.root.findNavController().navigate(R.id.action_signUpFragment_to_targetPointsActivity)
     }
 
     private fun checkTextInput() {
@@ -127,14 +137,6 @@ class SignUpFragment : BaseFragment(), AuthView {
         return isGenderValid
     }
 
-    private fun goToLogin() {
-        binding.root.findNavController().navigate(R.id.signInFragment)
-    }
-
-    override fun showMainPage() {
-        binding.root.findNavController().navigate(R.id.targetPointsActivity)
-    }
-
     private fun initGenderDropDown() {
         val items =
             listOf(getString(R.string.female), getString(R.string.male), getString(R.string.other))
@@ -189,14 +191,5 @@ class SignUpFragment : BaseFragment(), AuthView {
                 }
             }
         }
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() =
-            SignUpFragment().apply {
-                arguments = Bundle().apply {}
-            }
     }
 }

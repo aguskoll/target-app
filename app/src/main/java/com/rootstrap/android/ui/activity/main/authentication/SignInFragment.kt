@@ -146,11 +146,5 @@ class SignInFragment : BaseFragment(), AuthView {
 
     companion object {
         const val FACEBOOK_PERMISSION = "public_profile"
-
-        @JvmStatic
-        fun newInstance() =
-            SignInFragment().apply {
-                arguments = Bundle().apply {}
-            }
     }
 }

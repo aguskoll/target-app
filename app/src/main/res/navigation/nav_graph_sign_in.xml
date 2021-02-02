@@ -15,7 +15,11 @@
             app:destination="@id/targetPointsActivity" />
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
+            app:destination="@id/signUpFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/slide_down" />
     </fragment>
 
     <activity
@@ -23,10 +27,20 @@
         android:name="com.rootstrap.android.ui.activity.main.targetpoint.TargetPointsActivity"
         android:label="activity_target_points"
         tools:layout="@layout/activity_target_points" />
+
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.rootstrap.android.ui.activity.main.authentication.SignUpFragment"
         android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" />
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_targetPointsActivity"
+            app:destination="@id/targetPointsActivity"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/signInFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
 
 </navigation>
