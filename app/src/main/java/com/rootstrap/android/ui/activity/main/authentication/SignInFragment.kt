@@ -99,7 +99,7 @@ class SignInFragment : BaseFragment(), AuthView {
     }
 
     private fun goToSignUp() {
-        binding.root.findNavController().navigate(R.id.signUpActivity)
+        binding.root.findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
     }
 
     private fun signIn() {

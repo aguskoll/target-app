@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.rootstrap.android.R
-import com.rootstrap.android.ui.activity.main.authentication.SignInActivity
+import com.rootstrap.android.ui.activity.main.authentication.AuthenticationActivity
 import com.rootstrap.android.ui.base.BaseActivity
 
 class SplashActivity : BaseActivity() {
@@ -12,7 +12,7 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivityClearTask(SignInActivity())
+            startActivityClearTask(AuthenticationActivity())
             finish()
         }, 1500)
     }

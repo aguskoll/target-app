@@ -14,8 +14,8 @@
             android:id="@+id/action_signInFragment_to_targetPointsActivity"
             app:destination="@id/targetPointsActivity" />
         <action
-            android:id="@+id/action_signInFragment_to_signUpActivity"
-            app:destination="@id/signUpActivity" />
+            android:id="@+id/action_signInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
     </fragment>
 
     <activity
@@ -23,11 +23,10 @@
         android:name="com.rootstrap.android.ui.activity.main.targetpoint.TargetPointsActivity"
         android:label="activity_target_points"
         tools:layout="@layout/activity_target_points" />
-
-    <activity
-        android:id="@+id/signUpActivity"
-        android:name="com.rootstrap.android.ui.activity.main.authentication.SignUpActivity"
-        android:label="SignUpActivity"
-        tools:layout="@layout/activity_sign_up"/>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.rootstrap.android.ui.activity.main.authentication.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
 
 </navigation>

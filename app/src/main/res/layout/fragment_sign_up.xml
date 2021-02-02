@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/frame_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_main_header"
+                android:layout_marginTop="@dimen/margin_negative_100"
+                android:src="@drawable/bc_header_green_yellow" />
+
+            <TextView
+                android:id="@+id/title_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextHeaderLoginTitle"
+                app:layout_constraintTop_toTopOf="parent" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/first_name_hint_text"
+            style="@style/HintTextSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/first_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frame_header" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/first_name_text_input_layout"
+            style="@style/TextInputLayoutBlackOutlinedBoxCorners"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/first_name_hint_text">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/first_name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:gravity="center"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/email_hint_text"
+            style="@style/HintTextSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_input_margin_top"
+            android:text="@string/email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/first_name_text_input_layout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_text_input_layout"
+            style="@style/TextInputLayoutBlackOutlinedBoxCorners"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_hint_text">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/email_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:gravity="center"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/password_hint_text"
+            style="@style/HintTextSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_input_margin_top"
+            android:text="@string/password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_text_input_layout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_text_input_layout"
+            style="@style/TextInputLayoutBlackOutlinedBoxCorners"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_hint_text">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/password_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:gravity="center" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/confirm_password_hint_text"
+            style="@style/HintTextSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_input_margin_top"
+            android:text="@string/confirm_password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_text_input_layout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirm_password_text_input_layout"
+            style="@style/TextInputLayoutBlackOutlinedBoxCorners"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/confirm_password_hint_text">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/confirm_password_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:gravity="center"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/sign_up_button"
+            style="@style/ButtonSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_input_margin_top"
+            android:text="@string/sign_up"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gender_drop_down" />
+
+        <View
+            android:id="@+id/view_separator"
+            android:layout_width="@dimen/no_dimen"
+            android:layout_height="@dimen/view_separator_height"
+            android:layout_marginTop="@dimen/margin_normal_30"
+            android:background="@android:color/black"
+            app:layout_constraintEnd_toEndOf="@+id/sign_in_text_view"
+            app:layout_constraintStart_toStartOf="@+id/sign_in_text_view"
+            app:layout_constraintTop_toBottomOf="@id/sign_up_button" />
+
+
+        <TextView
+            android:id="@+id/sign_in_text_view"
+            style="@style/TextSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_small_10"
+            android:text="@string/sign_in"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_separator"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/gender_hint_text"
+            style="@style/HintTextSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_input_margin_top"
+            android:text="@string/gender"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/confirm_password_text_input_layout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/gender_drop_down"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_input_text_layout_login"
+            app:errorEnabled="true"
+            app:layout_constraintTop_toBottomOf="@+id/gender_hint_text"
+            app:boxCornerRadiusTopEnd="@dimen/no_dimen"
+            app:boxCornerRadiusTopStart="@dimen/no_dimen"
+            app:boxCornerRadiusBottomStart="@dimen/no_dimen"
+            app:boxCornerRadiusBottomEnd="@dimen/no_dimen">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/gender_drop_down_text"
+                style="@style/HintTextSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/select_your_gender"
+                android:inputType="none"
+                android:textAllCaps="true"
+                android:textColor="@android:color/black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
