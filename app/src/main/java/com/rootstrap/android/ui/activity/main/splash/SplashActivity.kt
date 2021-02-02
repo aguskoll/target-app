@@ -13,7 +13,8 @@ class SplashActivity : BaseActivity() {
         setContentView(R.layout.activity_splash)
         Handler(Looper.getMainLooper()).postDelayed({
             startActivityClearTask(AuthenticationActivity())
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
-        }, 1500)
+        }, 1000)
     }
 }
