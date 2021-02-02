@@ -37,10 +37,15 @@
             android:id="@+id/action_signUpFragment_to_targetPointsActivity"
             app:destination="@id/targetPointsActivity"
             app:launchSingleTop="true"
+            app:popUpToInclusive="true"
             app:popUpTo="@id/signInFragment" />
         <action
             android:id="@+id/action_signUpFragment_to_signInFragment"
-            app:destination="@id/signInFragment" />
+            app:destination="@id/signInFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/slide_down"
+            app:popUpTo="@id/signInFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

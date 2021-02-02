@@ -59,7 +59,7 @@ class SignUpFragment : BaseFragment(), AuthView {
     }
 
     private fun goToLogin() {
-        binding.root.findNavController().navigateUp()
+        binding.root.findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
     }
 
     override fun showMainPage() {
