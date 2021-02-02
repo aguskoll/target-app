@@ -1,18 +1,43 @@
 package com.rootstrap.android.ui.base
 
+import android.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.rootstrap.android.R
+import com.rootstrap.android.ui.custom.LoadingDialog
 
 open class BaseFragment : Fragment(), BaseView {
 
+    private var loadingDialog: LoadingDialog? = null
+
     override fun showProgress() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        if (loadingDialog == null) {
+            loadingDialog = LoadingDialog(requireContext(), null)
+        }
+
+        loadingDialog!!.show()
     }
 
     override fun hideProgress() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        if (loadingDialog != null) {
+            loadingDialog!!.dismiss()
+        }
     }
 
     override fun showError(message: String?) {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(getString(R.string.error))
+
+        when (message) {
+            "" -> builder.setMessage(getString(R.string.generic_error))
+            null -> builder.setMessage(getString(R.string.generic_error))
+            else -> builder.setMessage(message)
+        }
+
+        builder.setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+            dialog.cancel()
+        }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 }
