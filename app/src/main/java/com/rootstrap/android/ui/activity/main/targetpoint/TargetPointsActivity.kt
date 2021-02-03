@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.ActivityTargetPointsBinding
 import com.rootstrap.android.ui.activity.main.authentication.ProfileActivity
+import com.rootstrap.android.ui.base.BaseActivity
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.extensions.hideKeyboard
-import com.rootstrap.android.ui.base.BaseActivity
 
 class TargetPointsActivity : BaseActivity() {
 

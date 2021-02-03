@@ -1,15 +1,21 @@
 package com.rootstrap.android.ui.activity.main.targetpoint
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.CircleOptions
@@ -17,10 +23,15 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.FragmentMapBinding
+import com.rootstrap.android.models.TargetModel
+import com.rootstrap.android.util.extensions.getIconForTarget
 import com.rootstrap.android.util.permissions.PermissionFragment
 import com.rootstrap.android.util.permissions.PermissionResponse
 import com.rootstrap.android.util.permissions.checkNotGrantedPermissions
 import com.rootstrap.android.util.permissions.locationPermissions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MapFragment : PermissionFragment(), OnMapReadyCallback {
 
@@ -41,12 +52,14 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
     ): View? {
         binding = FragmentMapBinding.inflate(layoutInflater, container, false)
         val factory = CreateTargetViewModelViewModelFactory()
-        targetPointsViewModel = ViewModelProvider(this, factory).get(TargetPointsViewModel::class.java)
+        targetPointsViewModel = ViewModelProvider(requireActivity(), factory).get(TargetPointsViewModel::class.java)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeTargets()
+        observeNewTargets()
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
@@ -90,6 +103,65 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
         setMapCamera(location)
     }
 
+    private fun addCircleMarkerForTarget(target: TargetModel) {
+        val position = LatLng(target.lat, target.lng)
+        lifecycleScope.launch {
+            target.topic?.run {
+                mMap.addMarker(
+                    MarkerOptions()
+                        .position(position)
+                        .icon(
+                            bitmapDescriptorWithOvalBackground(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.bc_oval_marker),
+                                ContextCompat.getDrawable(requireContext(), getIconForTarget())
+                            )
+                        )
+                )
+            }
+        }
+    }
+
+    private suspend fun bitmapDescriptorWithOvalBackground(
+        background: Drawable?,
+        iconVectorDrawable: Drawable?
+    ): BitmapDescriptor? {
+
+        return withContext(Dispatchers.IO) {
+
+            background?.let { back ->
+                val backgroundWidth = back.intrinsicWidth
+                val backgroundHeight = back.intrinsicHeight
+
+                iconVectorDrawable?.let { icon ->
+                    val drawableWidth = icon.intrinsicWidth
+                    val drawableHeight = icon.intrinsicHeight
+
+                    back.setBounds(0, 0, backgroundWidth, backgroundHeight)
+
+                    icon.setBounds(
+                        0,
+                        0,
+                        drawableWidth,
+                        drawableHeight
+                    )
+
+                    val bitmap = Bitmap.createBitmap(backgroundWidth, backgroundHeight, Bitmap.Config.ARGB_8888)
+
+                    val canvas = Canvas(bitmap)
+                    back.draw(canvas)
+
+                    canvas.translate(
+                        (backgroundWidth / 2 - drawableWidth / 2).toFloat(),
+                        (backgroundHeight / 2 - drawableHeight / 2).toFloat()
+                    )
+                    icon.draw(canvas)
+
+                    return@withContext BitmapDescriptorFactory.fromBitmap(bitmap)
+                }
+            } ?: return@withContext null
+        }
+    }
+
     private fun drawCircle(point: LatLng) {
         val circleOptions = CircleOptions().apply {
             center(point)
@@ -124,6 +196,20 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
 
                 override fun foreverDenied() = Unit
             })
+    }
+
+    private fun observeTargets() {
+        targetPointsViewModel.targets.observe(viewLifecycleOwner, Observer {
+            it.forEach { target ->
+                addCircleMarkerForTarget(target)
+            }
+        })
+    }
+
+    private fun observeNewTargets() {
+        targetPointsViewModel.newTarget.observe(viewLifecycleOwner, Observer {
+            addCircleMarkerForTarget(it)
+        })
     }
 
     companion object {

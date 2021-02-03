@@ -7,11 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.rootstrap.android.models.TargetModel
+import com.rootstrap.android.models.TopicModel
+import com.rootstrap.android.models.mapToTargetRequest
 import com.rootstrap.android.network.managers.ILocationManager
 import com.rootstrap.android.network.managers.LocationManager
 import com.rootstrap.android.network.models.Target
-import com.rootstrap.android.network.models.Topic
 import com.rootstrap.android.network.models.TopicSerializer
+import com.rootstrap.android.network.models.mapToModel
 import com.rootstrap.android.network.services.ITargetPointService
 import com.rootstrap.android.network.services.TargetPointService
 import com.rootstrap.android.ui.base.BaseViewModel
@@ -25,17 +28,18 @@ class TargetPointsViewModel(
 ) : BaseViewModel(null) {
 
     var createTargetState: MutableLiveData<CreateTargetState> = MutableLiveData()
-    var newTarget: MutableLiveData<Target> = MutableLiveData()
+    var newTarget: MutableLiveData<TargetModel> = MutableLiveData()
     var networkStateObservable: MutableLiveData<NetworkState> = MutableLiveData()
-    var topics: MutableLiveData<List<Topic>> = MutableLiveData()
+    var topics: MutableLiveData<List<TopicModel>> = MutableLiveData()
+    val targets: MutableLiveData<List<TargetModel>> = MutableLiveData()
 
-    fun createTarget(target: Target) {
+    fun createTarget(targetModel: TargetModel) {
         try {
             networkStateObservable.postValue(NetworkState.loading)
             viewModelScope.launch {
-                val result = targetService.createTarget(target)
+                val result = targetService.createTarget(targetModel.mapToTargetRequest())
                 if (result.isSuccess) {
-                    handleSuccess(result.getOrNull()?.value?.target)
+                    handleSuccess(result.getOrNull()?.value?.target?.mapToModel(targetModel.topic))
                 } else {
                     handleError(result.exceptionOrNull())
                 }
@@ -50,13 +54,15 @@ class TargetPointsViewModel(
         locationManager.getDeviceLocation(context, successAction)
     }
 
-    fun getTopics(): LiveData<List<Topic>> {
+    fun getTopics(): LiveData<List<TopicModel>> {
         try {
             viewModelScope.launch {
                 val result = targetService.getTopics()
                 if (result.isSuccess) {
                     val topicsSerializer: List<TopicSerializer> = result.getOrNull()?.value?.topics ?: emptyList()
-                    topics.postValue(topicsSerializer.map { it.topic })
+                    val topicsModel: List<TopicModel> = topicsSerializer.map { it.topic }.mapNotNull { it.mapToModel() }
+                    getTargets(topicsModel)
+                    topics.postValue(topicsModel)
                 } else {
                     handleError(result.exceptionOrNull())
                 }
@@ -67,7 +73,29 @@ class TargetPointsViewModel(
         return topics
     }
 
-    private fun handleSuccess(target: Target?) {
+    private fun getTargets(topics: List<TopicModel>) {
+
+        try {
+            viewModelScope.launch {
+                val result = targetService.getTargets()
+                if (result.isSuccess) {
+                    val values: List<Target> = result.getOrNull()?.value?.targets?.map { it.target } ?: emptyList()
+
+                    val targetsModels =
+                        values.map { target ->
+                            target.mapToModel(topics.firstOrNull { topic -> target.topic_id == topic?.id })
+                        }
+                    targets.postValue(targetsModels)
+                } else {
+                    targets.postValue(emptyList())
+                }
+            }
+        } catch (io: IOException) {
+            targets.postValue(emptyList())
+        }
+    }
+
+    private fun handleSuccess(target: TargetModel?) {
         createTargetState.postValue(CreateTargetState.success)
         networkStateObservable.postValue(NetworkState.idle)
         target?.let {
@@ -91,7 +119,7 @@ class TargetPointsViewModel(
 
     fun isTitleValid(title: String?): Boolean = title.isNullOrEmpty().not()
 
-    fun isTopicValid(topic: Int): Boolean = topic > 0
+    fun isTopicValid(topic: TopicModel?): Boolean = topic != null
 }
 
 class CreateTargetViewModelViewModelFactory() : ViewModelProvider.Factory {

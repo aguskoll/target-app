@@ -3,5 +3,6 @@
     <color name="colorPrimary">#2FBCF7</color>
     <color name="colorPrimaryDark">#2C9236</color>
     <color name="colorAccent">#EFC638</color>
+    <color name="yellowTransparent">#AAEFC638</color>
     <color name="whiteTransparent">#AAFFFFFF</color>
 </resources>

@@ -9,8 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.rootstrap.android.databinding.ActivityTargetPointsBinding
-import com.rootstrap.android.network.models.Target
-import com.rootstrap.android.network.models.Topic
+import com.rootstrap.android.models.TargetModel
+import com.rootstrap.android.models.TopicModel
 import com.rootstrap.android.ui.adapter.TopicAdapter
 import com.rootstrap.android.util.extensions.value
 import kotlinx.android.synthetic.main.fragment_create_target.view.*
@@ -32,7 +32,7 @@ class CreateTargetView(
 
     private lateinit var topicAdapter: TopicAdapter
 
-    private var selectedTopic: Topic? = null
+    private var selectedTopic: TopicModel? = null
 
     init {
 
@@ -83,7 +83,7 @@ class CreateTargetView(
         }
     }
 
-    private fun initTopicList(topics: List<Topic>) {
+    private fun initTopicList(topics: List<TopicModel>) {
         topicAdapter = TopicAdapter(topics) {
             selectedTopic(it)
         }
@@ -93,10 +93,10 @@ class CreateTargetView(
         }
     }
 
-    private fun selectedTopic(topic: Topic) {
+    private fun selectedTopic(topic: TopicModel) {
         selectedTopic = topic
         with(bindingRoot) {
-            topic_edit_text.text = Editable.Factory.getInstance().newEditable(topic.label)
+            topic_edit_text.text = Editable.Factory.getInstance().newEditable(topic.label.name.capitalize())
             topicAdapter.clearFilter()
             filter_edit_text.text = Editable.Factory.getInstance().newEditable("")
         }
@@ -107,20 +107,19 @@ class CreateTargetView(
         with(targetPointsViewModel) {
             val title = bindingRoot.title_edit_text.value()
             val area: Double = bindingRoot.area_edit_text.value().toDoubleOrNull() ?: 0.0
-            val topic: Int = selectedTopic?.id ?: 0
             val lat = getLocationLatitude()
             val lng = getLocationLongitude()
-            val target = Target(title, lat, lng, area, topic)
+            val target = TargetModel(title, lat, lng, area, selectedTopic)
 
             if (isLocationStateSuccess() &&
-                validateUserInputs(area, title, topic)
+                validateUserInputs(area, title, selectedTopic)
             ) {
                 createTarget(target)
             }
         }
     }
 
-    private fun validateUserInputs(area: Double, title: String?, topic: Int): Boolean =
+    private fun validateUserInputs(area: Double, title: String?, topic: TopicModel?): Boolean =
         validateArea(area) && validateTargetTitle(title) && validateTopic(topic)
 
     private fun validateArea(area: Double): Boolean {
@@ -138,7 +137,7 @@ class CreateTargetView(
         return isTitleValid
     }
 
-    private fun validateTopic(topic: Int): Boolean {
+    private fun validateTopic(topic: TopicModel?): Boolean {
         val isTopicValid = targetPointsViewModel.isTopicValid(topic)
         if (isTopicValid.not()) {
             bindingRoot.topic_text_input_layout.error = SHOW_EMPTY_ERROR

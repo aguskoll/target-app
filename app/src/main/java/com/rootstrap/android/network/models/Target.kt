@@ -1,5 +1,7 @@
 package com.rootstrap.android.network.models
 
+import com.rootstrap.android.models.TargetModel
+import com.rootstrap.android.models.TopicModel
 import com.squareup.moshi.Json
 
 data class Target(
@@ -11,3 +13,15 @@ data class Target(
 )
 
 data class TargetPointSerializer(@Json(name = "target") val target: Target)
+
+data class TargetsSerializer(@Json(name = "targets") val targets: List<TargetPointSerializer>)
+
+fun Target.mapToModel(topic: TopicModel?): TargetModel {
+    return TargetModel(
+        title = title,
+        lat = lat,
+        lng = lng,
+        radius = radius,
+        topic = topic
+    )
+}
