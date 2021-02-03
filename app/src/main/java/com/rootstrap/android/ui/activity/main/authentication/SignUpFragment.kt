@@ -23,6 +23,7 @@ class SignUpFragment : BaseFragment(), AuthView {
 
     private lateinit var viewModel: SignUpActivityViewModel
     private lateinit var binding: FragmentSignUpBinding
+    private lateinit var bindingRoot: ViewGroup
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +36,8 @@ class SignUpFragment : BaseFragment(), AuthView {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
+        bindingRoot = binding.root
+
         val factory = SignUpActivityViewModelFactory(viewModelListener)
 
         viewModel = ViewModelProvider(this, factory)
@@ -42,16 +45,17 @@ class SignUpFragment : BaseFragment(), AuthView {
 
         lifecycle.addObserver(viewModel)
 
-        return binding.root
+        return bindingRoot
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        with(binding) {
+            signUpButton.setOnClickListener { signUp() }
 
-        binding.signUpButton.setOnClickListener { signUp() }
-
-        binding.signInTextView.setOnClickListener {
-            goToLogin()
+            signInTextView.setOnClickListener {
+                goToLogin()
+            }
         }
 
         initGenderDropDown()
@@ -59,29 +63,30 @@ class SignUpFragment : BaseFragment(), AuthView {
     }
 
     private fun goToLogin() {
-        binding.root.findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
+        bindingRoot.findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
     }
 
     override fun showMainPage() {
-        binding.root.findNavController().navigate(R.id.action_signUpFragment_to_targetPointsActivity)
+        bindingRoot.findNavController().navigate(R.id.action_signUpFragment_to_targetPointsActivity)
     }
 
     private fun checkTextInput() {
-        addTextChangeListener(binding.firstNameEditText) { checkErrorForName() }
-        addTextChangeListener(binding.emailEditText) { checkErrorForEmail() }
-        addTextChangeListener(binding.passwordEditText) {
-            val validPass = checkErrorForPassword()
-            if (binding.confirmPasswordEditText.value().isNotEmpty())
-                checkErrorForConfirmPassword()
-            validPass
+        with(binding) {
+            addTextChangeListener(firstNameEditText) { checkErrorForName() }
+            addTextChangeListener(emailEditText) { checkErrorForEmail() }
+            addTextChangeListener(passwordEditText) {
+                val validPass = checkErrorForPassword()
+                if (confirmPasswordEditText.value().isNotEmpty())
+                    checkErrorForConfirmPassword()
+                validPass
+            }
+            addTextChangeListener(confirmPasswordEditText) { checkErrorForConfirmPassword() }
         }
-        addTextChangeListener(binding.confirmPasswordEditText) { checkErrorForConfirmPassword() }
     }
 
     private fun addTextChangeListener(editText: EditText, checkValidation: () -> Boolean) {
         editText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) =
-                Unit
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
 
@@ -92,59 +97,70 @@ class SignUpFragment : BaseFragment(), AuthView {
     }
 
     private fun checkErrorForName(): Boolean {
-        val isUserNameValid = viewModel.isUserNameValid(binding.firstNameEditText.value())
-        binding.firstNameTextInputLayout.error =
-            if (isUserNameValid.not())
-                getString(R.string.error_input_no_name)
-            else null
-        return isUserNameValid
+        with(binding) {
+            val isUserNameValid = viewModel.isUserNameValid(firstNameEditText.value())
+            firstNameTextInputLayout.error =
+                if (isUserNameValid.not())
+                    getString(R.string.error_input_no_name)
+                else null
+            return isUserNameValid
+        }
     }
 
     private fun checkErrorForEmail(): Boolean {
-        val isEmailValid = viewModel.isEmailValid(binding.emailEditText.value())
-        binding.emailTextInputLayout.error = if (isEmailValid.not())
-            getString(R.string.error_invalid_email)
-        else null
-        return isEmailValid
+        with(binding) {
+            val isEmailValid = viewModel.isEmailValid(emailEditText.value())
+            emailTextInputLayout.error = if (isEmailValid.not())
+                getString(R.string.error_invalid_email)
+            else null
+            return isEmailValid
+        }
     }
 
     private fun checkErrorForPassword(): Boolean {
-        val isPassValid = viewModel.isPasswordValid(binding.passwordEditText.value())
-        binding.passwordTextInputLayout.error =
-            if (isPassValid.not()) {
-                getString(R.string.error_password_length)
-            } else null
-        return isPassValid
+        with(binding) {
+            val isPassValid = viewModel.isPasswordValid(passwordEditText.value())
+            passwordTextInputLayout.error =
+                if (isPassValid.not()) {
+                    getString(R.string.error_password_length)
+                } else null
+            return isPassValid
+        }
     }
 
     private fun checkErrorForConfirmPassword(): Boolean {
-        val isConfirmPassValid = viewModel.isConfirmPasswordValid(
-            binding.passwordEditText.value(),
-            binding.confirmPasswordEditText.value()
-        )
-        binding.confirmPasswordTextInputLayout.error = if (isConfirmPassValid.not()) {
-            getString(R.string.error_passwords_not_match)
-        } else null
+        with(binding) {
+            val isConfirmPassValid = viewModel.isConfirmPasswordValid(
+                passwordEditText.value(),
+                confirmPasswordEditText.value()
+            )
+            confirmPasswordTextInputLayout.error = if (isConfirmPassValid.not()) {
+                getString(R.string.error_passwords_not_match)
+            } else null
 
-        return isConfirmPassValid
+            return isConfirmPassValid
+        }
     }
 
     private fun checkErrorGender(): Boolean {
-        val isGenderValid = viewModel.isGenderValid(binding.genderDropDownText.value())
-        binding.genderDropDown.error = if (isGenderValid.not()) {
-            getString(R.string.error_forgot_select_gender)
-        } else null
-        return isGenderValid
+        with(binding) {
+            val isGenderValid = viewModel.isGenderValid(genderDropDownText.value())
+            genderDropDown.error = if (isGenderValid.not()) {
+                getString(R.string.error_forgot_select_gender)
+            } else null
+            return isGenderValid
+        }
     }
 
     private fun initGenderDropDown() {
-        val items =
-            listOf(getString(R.string.female), getString(R.string.male), getString(R.string.other))
-        val adapter = ArrayAdapter(requireContext(), R.layout.gender_list_item, items)
-        (binding.genderDropDownText).setAdapter(adapter)
-        binding.genderDropDownText.isAllCaps = true
+        with(binding) {
+            val items = listOf(getString(R.string.female), getString(R.string.male), getString(R.string.other))
+            val adapter = ArrayAdapter(requireContext(), R.layout.gender_list_item, items)
+            (genderDropDownText).setAdapter(adapter)
+            genderDropDownText.isAllCaps = true
 
-        addTextChangeListener(binding.genderDropDownText) { checkErrorGender() }
+            addTextChangeListener(binding.genderDropDownText) { checkErrorGender() }
+        }
     }
 
     private fun isUserInputValid(): Boolean {
@@ -161,14 +177,16 @@ class SignUpFragment : BaseFragment(), AuthView {
 
     private fun signUp() {
         if (isUserInputValid()) {
-            val user = User(
-                email = binding.emailEditText.value(),
-                username = binding.firstNameEditText.value(),
-                passwordConfirmation = binding.confirmPasswordEditText.value(),
-                password = binding.passwordEditText.value(),
-                gender = binding.genderDropDownText.value().toLowerCase()
-            )
-            viewModel.signUp(user)
+            with(binding) {
+                val user = User(
+                    email = emailEditText.value(),
+                    username = firstNameEditText.value(),
+                    passwordConfirmation = confirmPasswordEditText.value(),
+                    password = passwordEditText.value(),
+                    gender = genderDropDownText.value().toLowerCase()
+                )
+                viewModel.signUp(user)
+            }
         }
     }
 
