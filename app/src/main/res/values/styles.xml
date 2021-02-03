@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:fontFamily">@font/open_sans</item>
         <item name="fontFamily">@font/open_sans</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationStyle</item>
     </style>
 
     <style name="OpenSansTextViewStyle" parent="android:Widget.TextView">
@@ -16,6 +17,10 @@
 
     <style name="OpenSansButtonStyle" parent="android:Widget.Holo.Button">
         <item name="android:fontFamily">@font/open_sans_bold</item>
+    </style>
+
+    <style name="WindowAnimationStyle">
+        <item name="android:windowEnterAnimation">@android:anim/linear_interpolator</item>
     </style>
 
     <style name="TextInputLayoutBlackOutlinedBoxCorners" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
