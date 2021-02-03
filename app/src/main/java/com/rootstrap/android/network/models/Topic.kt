@@ -1,6 +1,7 @@
 package com.rootstrap.android.network.models
 
 import com.rootstrap.android.models.TopicModel
+import com.rootstrap.android.models.TopicTypes
 import com.squareup.moshi.Json
 
 data class Topic(
@@ -13,10 +14,18 @@ data class TopicsSerializer(@Json(name = "topics") val topics: List<TopicSeriali
 
 data class TopicSerializer(@Json(name = "topic") val topic: Topic)
 
-fun Topic.mapToModel(): TopicModel {
-    return TopicModel(
-        id = id,
-        label = label,
-        icon = icon
-    )
+fun Topic.mapToModel(): TopicModel? {
+    try {
+
+        val topicLabel = TopicTypes.valueOf(label.toLowerCase())
+
+        return TopicModel(
+            id = id,
+            label = topicLabel,
+            icon = icon
+        )
+    } catch (ex: IllegalArgumentException) {
+        ex.printStackTrace()
+    }
+    return null
 }

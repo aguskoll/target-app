@@ -1,16 +1,16 @@
 package com.rootstrap.android.ui.activity.main.targetpoint
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -29,6 +29,9 @@ import com.rootstrap.android.util.permissions.PermissionFragment
 import com.rootstrap.android.util.permissions.PermissionResponse
 import com.rootstrap.android.util.permissions.checkNotGrantedPermissions
 import com.rootstrap.android.util.permissions.locationPermissions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MapFragment : PermissionFragment(), OnMapReadyCallback {
 
@@ -102,44 +105,61 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
 
     private fun addCircleMarkerForTarget(target: TargetModel) {
         val position = LatLng(target.lat, target.lng)
-        target.topic?.run {
-            mMap.addMarker(
-                MarkerOptions()
-                    .position(position)
-                    .icon(bitmapDescriptorwithOvalBackground(requireContext(), getIconForTarget()))
-            )
+        lifecycleScope.launch {
+            target.topic?.run {
+                mMap.addMarker(
+                    MarkerOptions()
+                        .position(position)
+                        .icon(
+                            bitmapDescriptorWithOvalBackground(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.bc_oval_marker),
+                                ContextCompat.getDrawable(requireContext(), getIconForTarget())
+                            )
+                        )
+                )
+            }
         }
     }
 
-    private fun bitmapDescriptorwithOvalBackground(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor? {
-        val background = ContextCompat.getDrawable(context, R.drawable.bc_oval_marker)
-        val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
-        val backgroundWidth = background?.intrinsicWidth ?: 0
-        val backgroundHeight = background?.intrinsicHeight ?: 0
-        val drawableWidth = vectorDrawable?.intrinsicWidth ?: 0
-        val drawableHeight = vectorDrawable?.intrinsicHeight ?: 0
+    private suspend fun bitmapDescriptorWithOvalBackground(
+        background: Drawable?,
+        iconVectorDrawable: Drawable?
+    ): BitmapDescriptor? {
 
-        background?.setBounds(0, 0, backgroundWidth, backgroundHeight)
+        return withContext(Dispatchers.IO) {
 
-        vectorDrawable?.setBounds(
-            0,
-            0,
-            drawableWidth,
-            drawableHeight
-        )
+            background?.let { back ->
+                val backgroundWidth = back.intrinsicWidth
+                val backgroundHeight = back.intrinsicHeight
 
-        val bitmap = Bitmap.createBitmap(backgroundWidth, backgroundHeight, Bitmap.Config.ARGB_8888)
+                iconVectorDrawable?.let { icon ->
+                    val drawableWidth = icon.intrinsicWidth
+                    val drawableHeight = icon.intrinsicHeight
 
-        val canvas = Canvas(bitmap)
-        background?.draw(canvas)
+                    back.setBounds(0, 0, backgroundWidth, backgroundHeight)
 
-        canvas.translate(
-            (backgroundWidth / 2 - drawableWidth / 2).toFloat(),
-            (backgroundHeight / 2 - drawableHeight / 2).toFloat()
-        )
-        vectorDrawable?.draw(canvas)
+                    icon.setBounds(
+                        0,
+                        0,
+                        drawableWidth,
+                        drawableHeight
+                    )
 
-        return BitmapDescriptorFactory.fromBitmap(bitmap)
+                    val bitmap = Bitmap.createBitmap(backgroundWidth, backgroundHeight, Bitmap.Config.ARGB_8888)
+
+                    val canvas = Canvas(bitmap)
+                    back.draw(canvas)
+
+                    canvas.translate(
+                        (backgroundWidth / 2 - drawableWidth / 2).toFloat(),
+                        (backgroundHeight / 2 - drawableHeight / 2).toFloat()
+                    )
+                    icon.draw(canvas)
+
+                    return@withContext BitmapDescriptorFactory.fromBitmap(bitmap)
+                }
+            } ?: return@withContext null
+        }
     }
 
     private fun drawCircle(point: LatLng) {

@@ -15,7 +15,7 @@ class TopicAdapter(
     private val onItemSelected: (TopicModel) -> Unit
 ) : RecyclerView.Adapter<TopicViewHolder>() {
 
-    val itemsCopy = mutableListOf<TopicModel>()
+    private val itemsCopy = mutableListOf<TopicModel>()
 
     init {
         itemsCopy.addAll(topics)
@@ -31,7 +31,7 @@ class TopicAdapter(
     }
 
     fun filter(text: String) {
-        topics = itemsCopy.filter { it.label.toLowerCase().contains(text) }
+        topics = itemsCopy.filter { it.label.name.toLowerCase().contains(text) }
         notifyDataSetChanged()
     }
 
@@ -42,7 +42,7 @@ class TopicAdapter(
 
     override fun onBindViewHolder(holder: TopicViewHolder, position: Int) {
         val item = topics[position]
-        holder.binding.nameTopicText.text = item.label
+        holder.binding.nameTopicText.text = item.label.name
         Glide.with(holder.itemView)
             .load(item.icon)
             .centerCrop()
