@@ -72,14 +72,14 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
         mMap = googleMap
         checkLocationPermission()
         mMap.setOnMarkerClickListener { marker ->
-            deleteMarker(marker)
+            showTargetInfo(marker)
             return@setOnMarkerClickListener true
         }
     }
 
-    private fun deleteMarker(marker: Marker) {
+    private fun showTargetInfo(marker: Marker) {
         val target: TargetModel? = markerTargetMap[marker.id]
-        target?.run { targetPointsViewModel.deleteTarget(this) }
+        target?.run { targetPointsViewModel.showTargetInformation.postValue(target) }
     }
 
     private fun checkLocationPermission() {

@@ -33,6 +33,7 @@ class TargetPointsViewModel(
     var topics: MutableLiveData<List<TopicModel>> = MutableLiveData()
     val targets: MutableLiveData<List<TargetModel>> = MutableLiveData()
     val deletedTarget: MutableLiveData<TargetModel> = MutableLiveData()
+    val showTargetInformation: MutableLiveData<TargetModel> = MutableLiveData()
 
     fun createTarget(targetModel: TargetModel) {
         try {

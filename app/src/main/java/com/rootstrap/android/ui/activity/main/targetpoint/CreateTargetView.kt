@@ -34,6 +34,8 @@ class CreateTargetView(
 
     private var selectedTopic: TopicModel? = null
 
+    private var selectedTarget: TargetModel? = null
+
     init {
 
         bottomSheetBehavior.apply {
@@ -54,11 +56,20 @@ class CreateTargetView(
             save_target_btn.setOnClickListener {
                 createTarget()
             }
+
+            delete_target_small_btn.setOnClickListener {
+                deleteTarget()
+            }
+            save_target_small_btn.setOnClickListener {
+                expandCollapseCreateTargetSheet()
+            }
         }
 
         getTopics()
 
         initTopicsFilter()
+
+        observeShowTarget()
     }
 
     private fun getTopics() {
@@ -91,6 +102,12 @@ class CreateTargetView(
             adapter = topicAdapter
             layoutManager = LinearLayoutManager(bindingRoot.context)
         }
+    }
+
+    private fun observeShowTarget() {
+        targetPointsViewModel.showTargetInformation.observe(lifecycleOwner, Observer {
+            showTargetInformation(it)
+        })
     }
 
     private fun selectedTopic(topic: TopicModel) {
@@ -147,9 +164,44 @@ class CreateTargetView(
 
     fun expandCollapseCreateTargetSheet() {
         bottomSheetBehavior.state = if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+            bindingRoot.small_buttons_container.visibility = View.GONE
+            bindingRoot.save_target_btn.visibility = View.VISIBLE
+            deleteTargetInformation()
             BottomSheetBehavior.STATE_EXPANDED
         } else {
             BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+    private fun deleteTargetInformation() {
+        with(bindingRoot) {
+            title_edit_text.text = Editable.Factory.getInstance().newEditable("")
+            area_edit_text.text = Editable.Factory.getInstance().newEditable("")
+            topic_edit_text.text = Editable.Factory.getInstance().newEditable("")
+        }
+    }
+
+    private fun showTargetInformation(targetModel: TargetModel) {
+        bottomSheetBehavior.state = if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+            selectedTarget = targetModel
+            bindingRoot.small_buttons_container.visibility = View.VISIBLE
+            bindingRoot.save_target_btn.visibility = View.GONE
+            bindingRoot.title_edit_text.text = Editable.Factory.getInstance().newEditable(targetModel.title)
+            bindingRoot.area_edit_text.text = Editable.Factory.getInstance().newEditable("" + targetModel.radius)
+            targetModel.topic?.run {
+                selectedTopic(this)
+            }
+
+            BottomSheetBehavior.STATE_EXPANDED
+        } else {
+            BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+    private fun deleteTarget() {
+        selectedTarget?.run {
+            targetPointsViewModel.deleteTarget(this)
+            expandCollapseCreateTargetSheet()
         }
     }
 
