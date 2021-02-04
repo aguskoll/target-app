@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.FragmentMapBinding
@@ -39,6 +40,8 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var binding: FragmentMapBinding
     private lateinit var targetPointsViewModel: TargetPointsViewModel
+    private var targetModelMap: HashMap<TargetModel, Marker> = HashMap()
+    private var markerTargetMap: HashMap<String, TargetModel> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +63,7 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         observeTargets()
         observeNewTargets()
+        observeDeletedTargets()
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
@@ -67,6 +71,15 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         checkLocationPermission()
+        mMap.setOnMarkerClickListener { marker ->
+            deleteMarker(marker)
+            return@setOnMarkerClickListener true
+        }
+    }
+
+    private fun deleteMarker(marker: Marker) {
+        val target: TargetModel? = markerTargetMap[marker.id]
+        target?.run { targetPointsViewModel.deleteTarget(this) }
     }
 
     private fun checkLocationPermission() {
@@ -107,7 +120,7 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
         val position = LatLng(target.lat, target.lng)
         lifecycleScope.launch {
             target.topic?.run {
-                mMap.addMarker(
+                val marker = mMap.addMarker(
                     MarkerOptions()
                         .position(position)
                         .icon(
@@ -117,6 +130,8 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
                             )
                         )
                 )
+                targetModelMap[target] = marker
+                markerTargetMap[marker.id] = target
             }
         }
     }
@@ -209,6 +224,17 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
     private fun observeNewTargets() {
         targetPointsViewModel.newTarget.observe(viewLifecycleOwner, Observer {
             addCircleMarkerForTarget(it)
+        })
+    }
+
+    private fun observeDeletedTargets() {
+        targetPointsViewModel.deletedTarget.observe(viewLifecycleOwner, Observer { target ->
+            val marker = targetModelMap[target]
+            marker?.run {
+                marker.remove()
+                markerTargetMap.remove(marker.id)
+                targetModelMap.remove(target)
+            }
         })
     }
 

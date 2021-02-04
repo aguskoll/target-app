@@ -10,6 +10,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -33,4 +34,7 @@ interface ApiService {
 
     @GET("targets")
     fun getTargets(): Call<TargetsSerializer>
+
+    @DELETE("targets/{id}")
+    fun deleteTarget(@Path("id") id: Long): Call<Void>
 }

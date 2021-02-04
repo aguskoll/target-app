@@ -32,6 +32,7 @@ class TargetPointsViewModel(
     var networkStateObservable: MutableLiveData<NetworkState> = MutableLiveData()
     var topics: MutableLiveData<List<TopicModel>> = MutableLiveData()
     val targets: MutableLiveData<List<TargetModel>> = MutableLiveData()
+    val deletedTarget: MutableLiveData<TargetModel> = MutableLiveData()
 
     fun createTarget(targetModel: TargetModel) {
         try {
@@ -92,6 +93,18 @@ class TargetPointsViewModel(
             }
         } catch (io: IOException) {
             targets.postValue(emptyList())
+        }
+    }
+
+    fun deleteTarget(target: TargetModel) {
+        try {
+            viewModelScope.launch {
+                val result = targetService.deleteTarget(target.id)
+                if (result.isSuccess) {
+                    deletedTarget.postValue(target)
+                }
+            }
+        } catch (ex: IOException) {
         }
     }
 
