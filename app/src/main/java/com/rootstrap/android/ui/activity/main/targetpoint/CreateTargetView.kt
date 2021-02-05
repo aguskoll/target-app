@@ -199,6 +199,8 @@ class CreateTargetView(
             title_edit_text.text = Util.createEmptyEditable()
             area_edit_text.text = Util.createEmptyEditable()
             topic_edit_text.text = Util.createEmptyEditable()
+            text_select_topic.text = context.getString(R.string.select_a_topic)
+            text_area_length.text = context.getString(R.string.specify_area_length)
         }
     }
 
@@ -220,6 +222,8 @@ class CreateTargetView(
             targetModel.topic?.run {
                 selectedTopic(this)
             }
+            text_select_topic.text = context.getString(R.string.topic)
+            text_area_length.text = context.getString(R.string.area_length)
         }
     }
 

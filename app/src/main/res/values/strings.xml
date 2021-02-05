@@ -69,4 +69,6 @@
     <string name="save">Save</string>
     <string name="delete">Delete</string>
     <string name="failed_creating_target">Failed creating target</string>
+    <string name="topic">Topic</string>
+    <string name="area_length">Area length</string>
 </resources>
