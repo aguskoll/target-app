@@ -27,12 +27,13 @@ class TargetPointsViewModel(
     private val locationManager: ILocationManager
 ) : BaseViewModel(null) {
 
-    var createTargetState: MutableLiveData<CreateTargetState> = MutableLiveData()
+    var createTargetState: MutableLiveData<ActionOnTargetState> = MutableLiveData()
     var newTarget: MutableLiveData<TargetModel> = MutableLiveData()
     var networkStateObservable: MutableLiveData<NetworkState> = MutableLiveData()
     var topics: MutableLiveData<List<TopicModel>> = MutableLiveData()
     val targets: MutableLiveData<List<TargetModel>> = MutableLiveData()
     val deletedTarget: MutableLiveData<TargetModel> = MutableLiveData()
+    val deleteTargetState: MutableLiveData<ActionOnTargetState> = MutableLiveData()
     private val showTarget: MutableLiveData<TargetModel> = MutableLiveData()
 
     fun createTarget(targetModel: TargetModel) {
@@ -103,14 +104,16 @@ class TargetPointsViewModel(
                 val result = targetService.deleteTarget(target.id)
                 if (result.isSuccess) {
                     deletedTarget.postValue(target)
+                    deleteTargetState.postValue(ActionOnTargetState.success)
                 }
             }
         } catch (ex: IOException) {
+            deleteTargetState.postValue(ActionOnTargetState.fail)
         }
     }
 
     private fun handleSuccess(target: TargetModel?) {
-        createTargetState.postValue(CreateTargetState.success)
+        createTargetState.postValue(ActionOnTargetState.success)
         networkStateObservable.postValue(NetworkState.idle)
         target?.let {
             newTarget.postValue(it)
@@ -118,7 +121,7 @@ class TargetPointsViewModel(
     }
 
     private fun handleError(exception: Throwable?) {
-        createTargetState.postValue(CreateTargetState.fail)
+        createTargetState.postValue(ActionOnTargetState.fail)
         networkStateObservable.postValue(NetworkState.error)
         error = getMessageErrorFromException(exception)
     }
@@ -150,7 +153,7 @@ class CreateTargetViewModelViewModelFactory() : ViewModelProvider.Factory {
     }
 }
 
-enum class CreateTargetState {
+enum class ActionOnTargetState {
     fail,
     success,
     none

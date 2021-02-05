@@ -8,10 +8,13 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.crashlytics.internal.common.CommonUtils.hideKeyboard
+import com.rootstrap.android.R
 import com.rootstrap.android.databinding.ActivityTargetPointsBinding
 import com.rootstrap.android.models.TargetModel
 import com.rootstrap.android.models.TopicModel
 import com.rootstrap.android.ui.adapter.TopicAdapter
+import com.rootstrap.android.util.DialogUtil
 import com.rootstrap.android.util.Util
 import com.rootstrap.android.util.extensions.value
 import kotlinx.android.synthetic.main.fragment_create_target.view.*
@@ -70,7 +73,11 @@ class CreateTargetView(
 
         initTopicsFilter()
 
+        observeCreateTargetState()
+
         observeShowTarget()
+
+        observeDeleteTargetState()
     }
 
     private fun getTopics() {
@@ -168,7 +175,7 @@ class CreateTargetView(
     fun expandCollapseCreateTargetSheet() {
         bottomSheetBehavior.state = if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
             showBottomButtons(true)
-            deleteTargetInformation()
+            eraseTargetInformation()
             BottomSheetBehavior.STATE_EXPANDED
         } else {
             BottomSheetBehavior.STATE_COLLAPSED
@@ -187,7 +194,7 @@ class CreateTargetView(
         }
     }
 
-    private fun deleteTargetInformation() {
+    private fun eraseTargetInformation() {
         with(bindingRoot) {
             title_edit_text.text = Util.createEmptyEditable()
             area_edit_text.text = Util.createEmptyEditable()
@@ -218,6 +225,16 @@ class CreateTargetView(
         }
     }
 
+    private fun observeDeleteTargetState() {
+        targetPointsViewModel.deleteTargetState.observe(lifecycleOwner, Observer { state ->
+            with(bindingRoot.context) {
+                if (state == ActionOnTargetState.fail) {
+                    showError(getString(R.string.failed_creating_target))
+                }
+            }
+        })
+    }
+
     private fun expandTopic() {
         with(topicsBottomSheetBehavior) {
             state = BottomSheetBehavior.STATE_HALF_EXPANDED
@@ -243,6 +260,29 @@ class CreateTargetView(
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
         })
+    }
+
+    private fun observeCreateTargetState() {
+        targetPointsViewModel.createTargetState.observe(lifecycleOwner, Observer { targetState ->
+            targetState?.run {
+                when (this) {
+                    ActionOnTargetState.fail -> showError(targetPointsViewModel.error ?: bindingRoot.context.getString(R.string.default_error))
+                    ActionOnTargetState.success -> {
+                        successCreatingTarget()
+                    }
+                    ActionOnTargetState.none -> Unit
+                }
+            }
+        })
+    }
+
+    private fun successCreatingTarget() {
+        expandCollapseCreateTargetSheet()
+        hideKeyboard(bindingRoot.context, bindingRoot)
+    }
+
+    private fun showError(message: String) {
+        DialogUtil.showError(bindingRoot.context, message)
     }
 
     companion object {
