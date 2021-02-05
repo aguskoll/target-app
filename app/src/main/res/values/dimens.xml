@@ -31,4 +31,5 @@
     <dimen name="fragment_vertical_margin">16dp</dimen>
     <dimen name="dimen_topic_icon">30dp</dimen>
     <dimen name="height_separator">1dp</dimen>
+    <dimen name="width_create_target_small_btn">120dp</dimen>
 </resources>

@@ -12,6 +12,7 @@ import com.rootstrap.android.databinding.ActivityTargetPointsBinding
 import com.rootstrap.android.models.TargetModel
 import com.rootstrap.android.models.TopicModel
 import com.rootstrap.android.ui.adapter.TopicAdapter
+import com.rootstrap.android.util.Util
 import com.rootstrap.android.util.extensions.value
 import kotlinx.android.synthetic.main.fragment_create_target.view.*
 import kotlinx.android.synthetic.main.layout_topics.view.*
@@ -113,10 +114,10 @@ class CreateTargetView(
     private fun selectedTopic(topic: TopicModel) {
         selectedTopic = topic
         with(bindingRoot) {
-            topic_edit_text.text = Editable.Factory.getInstance().newEditable(topic.label.name.capitalize())
+            topic_edit_text.text = Util.createEditable(topic.label.name.capitalize())
             topic_text_input_layout.error = null
             topicAdapter.clearFilter()
-            filter_edit_text.text = Editable.Factory.getInstance().newEditable("")
+            filter_edit_text.text = Util.createEmptyEditable()
         }
         collapseTopic()
     }
@@ -188,9 +189,9 @@ class CreateTargetView(
 
     private fun deleteTargetInformation() {
         with(bindingRoot) {
-            title_edit_text.text = Editable.Factory.getInstance().newEditable("")
-            area_edit_text.text = Editable.Factory.getInstance().newEditable("")
-            topic_edit_text.text = Editable.Factory.getInstance().newEditable("")
+            title_edit_text.text = Util.createEmptyEditable()
+            area_edit_text.text = Util.createEmptyEditable()
+            topic_edit_text.text = Util.createEmptyEditable()
         }
     }
 
@@ -198,8 +199,8 @@ class CreateTargetView(
         bottomSheetBehavior.state = if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
             selectedTarget = targetModel
             showBottomButtons(false)
-            bindingRoot.title_edit_text.text = Editable.Factory.getInstance().newEditable(targetModel.title)
-            bindingRoot.area_edit_text.text = Editable.Factory.getInstance().newEditable("" + targetModel.radius)
+            bindingRoot.title_edit_text.text = Util.createEditable(targetModel.title)
+            bindingRoot.area_edit_text.text = Util.createEditable("" + targetModel.radius)
             targetModel.topic?.run {
                 selectedTopic(this)
             }

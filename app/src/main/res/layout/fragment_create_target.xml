@@ -135,7 +135,7 @@
         <Button
             android:id="@+id/save_target_small_btn"
             style="@style/ButtonSignIn"
-            android:layout_width="120dp"
+            android:layout_width="@dimen/width_create_target_small_btn"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_input_margin_top"
             android:layout_marginBottom="@dimen/margin_normal_16"
@@ -148,7 +148,7 @@
             android:id="@+id/delete_target_small_btn"
             style="@style/ButtonSignIn"
             android:backgroundTint="@color/darkRed"
-            android:layout_width="120dp"
+            android:layout_width="@dimen/width_create_target_small_btn"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_input_margin_top"
             android:layout_marginBottom="@dimen/margin_normal_16"
