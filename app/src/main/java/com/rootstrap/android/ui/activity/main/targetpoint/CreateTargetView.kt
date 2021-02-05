@@ -204,17 +204,22 @@ class CreateTargetView(
 
     private fun showTargetInformation(targetModel: TargetModel) {
         bottomSheetBehavior.state = if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
-            selectedTarget = targetModel
-            showBottomButtons(false)
-            bindingRoot.title_edit_text.text = Util.createEditable(targetModel.title)
-            bindingRoot.area_edit_text.text = Util.createEditable("" + targetModel.radius)
-            targetModel.topic?.run {
-                selectedTopic(this)
-            }
-
+            completeTargetInformation(targetModel)
             BottomSheetBehavior.STATE_EXPANDED
         } else {
             BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+    private fun completeTargetInformation(targetModel: TargetModel) {
+        with(bindingRoot) {
+            selectedTarget = targetModel
+            showBottomButtons(false)
+            title_edit_text.text = Util.createEditable(targetModel.title)
+            area_edit_text.text = Util.createEditable("" + targetModel.radius)
+            targetModel.topic?.run {
+                selectedTopic(this)
+            }
         }
     }
 
@@ -266,7 +271,9 @@ class CreateTargetView(
         targetPointsViewModel.createTargetState.observe(lifecycleOwner, Observer { targetState ->
             targetState?.run {
                 when (this) {
-                    ActionOnTargetState.fail -> showError(targetPointsViewModel.error ?: bindingRoot.context.getString(R.string.default_error))
+                    ActionOnTargetState.fail -> showError(
+                        targetPointsViewModel.error ?: bindingRoot.context.getString(R.string.default_error)
+                    )
                     ActionOnTargetState.success -> {
                         successCreatingTarget()
                     }

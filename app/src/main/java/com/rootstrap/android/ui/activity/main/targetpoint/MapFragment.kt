@@ -229,10 +229,9 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
 
     private fun observeDeletedTargets() {
         targetPointsViewModel.deletedTarget.observe(viewLifecycleOwner, Observer { target ->
-            val marker = targetModelMap[target]
-            marker?.run {
-                marker.remove()
-                markerTargetMap.remove(marker.id)
+            targetModelMap[target]?.run {
+                remove()
+                markerTargetMap.remove(id)
                 targetModelMap.remove(target)
             }
         })
