@@ -114,6 +114,7 @@ class CreateTargetView(
         selectedTopic = topic
         with(bindingRoot) {
             topic_edit_text.text = Editable.Factory.getInstance().newEditable(topic.label.name.capitalize())
+            topic_text_input_layout.error = null
             topicAdapter.clearFilter()
             filter_edit_text.text = Editable.Factory.getInstance().newEditable("")
         }
@@ -141,24 +142,25 @@ class CreateTargetView(
 
     private fun validateArea(area: Double): Boolean {
         val isAreaValid = targetPointsViewModel.isAreaValid(area)
-        if (isAreaValid.not())
-            bindingRoot.area_text_input_layout.error = SHOW_EMPTY_ERROR
+        bindingRoot.area_text_input_layout.error = if (isAreaValid.not())
+            SHOW_EMPTY_ERROR
+        else null
         return isAreaValid
     }
 
     private fun validateTargetTitle(title: String?): Boolean {
         val isTitleValid = targetPointsViewModel.isTitleValid(title)
-        if (isTitleValid.not()) {
-            bindingRoot.title_text_input_layout.error = SHOW_EMPTY_ERROR
-        }
+        bindingRoot.title_text_input_layout.error = if (isTitleValid.not()) {
+            SHOW_EMPTY_ERROR
+        } else null
         return isTitleValid
     }
 
     private fun validateTopic(topic: TopicModel?): Boolean {
         val isTopicValid = targetPointsViewModel.isTopicValid(topic)
-        if (isTopicValid.not()) {
-            bindingRoot.topic_text_input_layout.error = SHOW_EMPTY_ERROR
-        }
+        bindingRoot.topic_text_input_layout.error = if (isTopicValid.not()) {
+            SHOW_EMPTY_ERROR
+        } else null
         return isTopicValid
     }
 
@@ -173,12 +175,14 @@ class CreateTargetView(
     }
 
     private fun showBottomButtons(isCreateTarget: Boolean) {
-        if (isCreateTarget) {
-            bindingRoot.small_buttons_container.visibility = View.GONE
-            bindingRoot.save_target_btn.visibility = View.VISIBLE
-        } else {
-            bindingRoot.small_buttons_container.visibility = View.VISIBLE
-            bindingRoot.save_target_btn.visibility = View.GONE
+        with(bindingRoot) {
+            if (isCreateTarget) {
+                small_buttons_container.visibility = View.GONE
+                save_target_btn.visibility = View.VISIBLE
+            } else {
+                small_buttons_container.visibility = View.VISIBLE
+                save_target_btn.visibility = View.GONE
+            }
         }
     }
 
