@@ -33,7 +33,7 @@ class TargetPointsViewModel(
     var topics: MutableLiveData<List<TopicModel>> = MutableLiveData()
     val targets: MutableLiveData<List<TargetModel>> = MutableLiveData()
     val deletedTarget: MutableLiveData<TargetModel> = MutableLiveData()
-    val showTargetInformation: MutableLiveData<TargetModel> = MutableLiveData()
+    private val showTarget: MutableLiveData<TargetModel> = MutableLiveData()
 
     fun createTarget(targetModel: TargetModel) {
         try {
@@ -121,6 +121,14 @@ class TargetPointsViewModel(
         createTargetState.postValue(CreateTargetState.fail)
         networkStateObservable.postValue(NetworkState.error)
         error = getMessageErrorFromException(exception)
+    }
+
+    fun showTargetInformation(targetModel: TargetModel) {
+        showTarget.postValue(targetModel)
+    }
+
+    fun hasToShowTargetInformation(): LiveData<TargetModel> {
+        return showTarget
     }
 
     fun getLocationLatitude(): Double = locationManager.getLocationLatitude()

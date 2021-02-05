@@ -105,7 +105,7 @@ class CreateTargetView(
     }
 
     private fun observeShowTarget() {
-        targetPointsViewModel.showTargetInformation.observe(lifecycleOwner, Observer {
+        targetPointsViewModel.hasToShowTargetInformation().observe(lifecycleOwner, Observer {
             showTargetInformation(it)
         })
     }
@@ -164,12 +164,21 @@ class CreateTargetView(
 
     fun expandCollapseCreateTargetSheet() {
         bottomSheetBehavior.state = if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
-            bindingRoot.small_buttons_container.visibility = View.GONE
-            bindingRoot.save_target_btn.visibility = View.VISIBLE
+            showBottomButtons(true)
             deleteTargetInformation()
             BottomSheetBehavior.STATE_EXPANDED
         } else {
             BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+    private fun showBottomButtons(isCreateTarget: Boolean) {
+        if (isCreateTarget) {
+            bindingRoot.small_buttons_container.visibility = View.GONE
+            bindingRoot.save_target_btn.visibility = View.VISIBLE
+        } else {
+            bindingRoot.small_buttons_container.visibility = View.VISIBLE
+            bindingRoot.save_target_btn.visibility = View.GONE
         }
     }
 
@@ -184,8 +193,7 @@ class CreateTargetView(
     private fun showTargetInformation(targetModel: TargetModel) {
         bottomSheetBehavior.state = if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
             selectedTarget = targetModel
-            bindingRoot.small_buttons_container.visibility = View.VISIBLE
-            bindingRoot.save_target_btn.visibility = View.GONE
+            showBottomButtons(false)
             bindingRoot.title_edit_text.text = Editable.Factory.getInstance().newEditable(targetModel.title)
             bindingRoot.area_edit_text.text = Editable.Factory.getInstance().newEditable("" + targetModel.radius)
             targetModel.topic?.run {

@@ -79,7 +79,7 @@ class MapFragment : PermissionFragment(), OnMapReadyCallback {
 
     private fun showTargetInfo(marker: Marker) {
         val target: TargetModel? = markerTargetMap[marker.id]
-        target?.run { targetPointsViewModel.showTargetInformation.postValue(target) }
+        target?.run { targetPointsViewModel.showTargetInformation(target) }
     }
 
     private fun checkLocationPermission() {
