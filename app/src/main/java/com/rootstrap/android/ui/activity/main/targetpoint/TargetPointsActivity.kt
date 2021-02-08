@@ -50,7 +50,6 @@ class TargetPointsActivity : BaseActivity() {
         })
     }
 
-    // TODO: show target in map and remove toast
     private fun successCreatingTarget() {
         createTargetView.expandCollapseCreateTargetSheet()
         hideKeyboard()

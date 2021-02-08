@@ -1,18 +1,19 @@
 package com.rootstrap.android.ui.base
 
 import androidx.fragment.app.Fragment
+import com.rootstrap.android.util.DialogUtil
 
 open class BaseFragment : Fragment(), BaseView {
 
     override fun showProgress() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        DialogUtil.showProgress(requireContext())
     }
 
     override fun hideProgress() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        DialogUtil.hideProgress()
     }
 
     override fun showError(message: String?) {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        DialogUtil.showError(requireContext(), message)
     }
 }
