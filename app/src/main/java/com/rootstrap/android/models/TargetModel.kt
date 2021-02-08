@@ -7,7 +7,8 @@ data class TargetModel(
     val lat: Double = 0.0,
     val lng: Double = 0.0,
     val radius: Double = 0.0,
-    val topic: TopicModel? = null
+    val topic: TopicModel? = null,
+    val id: Long = 0
 )
 
 fun TargetModel.mapToTargetRequest(): Target {
@@ -16,6 +17,7 @@ fun TargetModel.mapToTargetRequest(): Target {
         lat = lat,
         lng = lng,
         radius = radius,
-        topic_id = topic?.id ?: 0
+        topic_id = topic?.id ?: 0,
+        id = id
     )
 }

@@ -27,11 +27,14 @@ class TargetPointsViewModel(
     private val locationManager: ILocationManager
 ) : BaseViewModel(null) {
 
-    var createTargetState: MutableLiveData<CreateTargetState> = MutableLiveData()
+    var createTargetState: MutableLiveData<ActionOnTargetState> = MutableLiveData()
     var newTarget: MutableLiveData<TargetModel> = MutableLiveData()
     var networkStateObservable: MutableLiveData<NetworkState> = MutableLiveData()
     var topics: MutableLiveData<List<TopicModel>> = MutableLiveData()
     val targets: MutableLiveData<List<TargetModel>> = MutableLiveData()
+    val deletedTarget: MutableLiveData<TargetModel> = MutableLiveData()
+    val deleteTargetState: MutableLiveData<ActionOnTargetState> = MutableLiveData()
+    private val showTarget: MutableLiveData<TargetModel> = MutableLiveData()
 
     fun createTarget(targetModel: TargetModel) {
         try {
@@ -95,8 +98,22 @@ class TargetPointsViewModel(
         }
     }
 
+    fun deleteTarget(target: TargetModel) {
+        try {
+            viewModelScope.launch {
+                val result = targetService.deleteTarget(target.id)
+                if (result.isSuccess) {
+                    deletedTarget.postValue(target)
+                    deleteTargetState.postValue(ActionOnTargetState.success)
+                }
+            }
+        } catch (ex: IOException) {
+            deleteTargetState.postValue(ActionOnTargetState.fail)
+        }
+    }
+
     private fun handleSuccess(target: TargetModel?) {
-        createTargetState.postValue(CreateTargetState.success)
+        createTargetState.postValue(ActionOnTargetState.success)
         networkStateObservable.postValue(NetworkState.idle)
         target?.let {
             newTarget.postValue(it)
@@ -104,9 +121,17 @@ class TargetPointsViewModel(
     }
 
     private fun handleError(exception: Throwable?) {
-        createTargetState.postValue(CreateTargetState.fail)
+        createTargetState.postValue(ActionOnTargetState.fail)
         networkStateObservable.postValue(NetworkState.error)
         error = getMessageErrorFromException(exception)
+    }
+
+    fun showTargetInformation(targetModel: TargetModel) {
+        showTarget.postValue(targetModel)
+    }
+
+    fun hasToShowTargetInformation(): LiveData<TargetModel> {
+        return showTarget
     }
 
     fun getLocationLatitude(): Double = locationManager.getLocationLatitude()
@@ -128,7 +153,7 @@ class CreateTargetViewModelViewModelFactory() : ViewModelProvider.Factory {
     }
 }
 
-enum class CreateTargetState {
+enum class ActionOnTargetState {
     fail,
     success,
     none

@@ -2,7 +2,6 @@ package com.rootstrap.android.ui.activity.main.targetpoint
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.rootstrap.android.R
@@ -10,7 +9,6 @@ import com.rootstrap.android.databinding.ActivityTargetPointsBinding
 import com.rootstrap.android.ui.activity.main.authentication.ProfileActivity
 import com.rootstrap.android.ui.base.BaseActivity
 import com.rootstrap.android.util.NetworkState
-import com.rootstrap.android.util.extensions.hideKeyboard
 
 class TargetPointsActivity : BaseActivity() {
 
@@ -29,31 +27,9 @@ class TargetPointsActivity : BaseActivity() {
         val factory = CreateTargetViewModelViewModelFactory()
         targetPointsViewModel = ViewModelProvider(this, factory).get(TargetPointsViewModel::class.java)
 
-        observeCreateTargetState()
-
         observeNetworkState()
 
         initView()
-    }
-
-    private fun observeCreateTargetState() {
-        targetPointsViewModel.createTargetState.observe(this, Observer { targetState ->
-            targetState?.run {
-                when (this) {
-                    CreateTargetState.fail -> showError(targetPointsViewModel.error ?: getString(R.string.default_error))
-                    CreateTargetState.success -> {
-                        successCreatingTarget()
-                    }
-                    CreateTargetState.none -> Unit
-                }
-            }
-        })
-    }
-
-    private fun successCreatingTarget() {
-        createTargetView.expandCollapseCreateTargetSheet()
-        hideKeyboard()
-        Toast.makeText(this, getString(R.string.success_creating_target), Toast.LENGTH_LONG).show()
     }
 
     private fun observeNetworkState() {

@@ -13,4 +13,6 @@ interface ITargetPointService {
     suspend fun getTopics(): Result<Data<TopicsSerializer>>
 
     suspend fun getTargets(): Result<Data<TargetsSerializer>>
+
+    suspend fun deleteTarget(id: Long): Result<Data<Void>>
 }
