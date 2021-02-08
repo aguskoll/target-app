@@ -1,9 +1,14 @@
 package com.rootstrap.android.ui.activity.main.targetpoint
 
+import android.graphics.drawable.Drawable
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.TextWatcher
+import android.text.style.ImageSpan
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +21,7 @@ import com.rootstrap.android.models.TopicModel
 import com.rootstrap.android.ui.adapter.TopicAdapter
 import com.rootstrap.android.util.DialogUtil
 import com.rootstrap.android.util.Util
+import com.rootstrap.android.util.extensions.getIconForTarget
 import com.rootstrap.android.util.extensions.value
 import kotlinx.android.synthetic.main.fragment_create_target.view.*
 import kotlinx.android.synthetic.main.layout_topics.view.*
@@ -121,12 +127,25 @@ class CreateTargetView(
     private fun selectedTopic(topic: TopicModel) {
         selectedTopic = topic
         with(bindingRoot) {
-            topic_edit_text.text = Util.createEditable(topic.label.name.capitalize())
             topic_text_input_layout.error = null
             topicAdapter.clearFilter()
             filter_edit_text.text = Util.createEmptyEditable()
         }
+        setTopicIcon(topic)
         collapseTopic()
+    }
+
+    private fun setTopicIcon(topic: TopicModel) {
+        val textSpan = SpannableString(DOUBLE_EMPTY_SPACE_FOR_SPAN + topic.label.name)
+        val iconDrawable: Drawable? = ContextCompat.getDrawable(bindingRoot.context, topic.getIconForTarget())
+        iconDrawable?.setBounds(0, 0, 60, 60)
+
+        iconDrawable?.run {
+            val imageSpan = ImageSpan(iconDrawable, ImageSpan.ALIGN_CENTER)
+            textSpan.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+            val editable = Editable.Factory.getInstance().newEditable(textSpan)
+            bindingRoot.topic_edit_text.text = editable
+        }
     }
 
     private fun createTarget() {
@@ -298,6 +317,7 @@ class CreateTargetView(
 
     companion object {
         const val SHOW_EMPTY_ERROR = " "
+        const val DOUBLE_EMPTY_SPACE_FOR_SPAN = "  "
         const val MIN_CHAR_FILTER = 3
         const val TOPIC_SHEET_EXPANDED_RATIO = 0.70f
     }
