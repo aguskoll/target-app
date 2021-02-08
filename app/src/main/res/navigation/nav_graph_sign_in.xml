@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/signInFragment">
+
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.rootstrap.android.ui.activity.main.authentication.SignInFragment"
+        android:label="SignInFragment"
+        tools:layout="@layout/fragment_sign_in">
+        <action
+            android:id="@+id/action_signInFragment_to_targetPointsActivity"
+            app:destination="@id/targetPointsActivity" />
+        <action
+            android:id="@+id/action_signInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/slide_down" />
+    </fragment>
+
+    <activity
+        android:id="@+id/targetPointsActivity"
+        android:name="com.rootstrap.android.ui.activity.main.targetpoint.TargetPointsActivity"
+        android:label="activity_target_points"
+        tools:layout="@layout/activity_target_points" />
+
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.rootstrap.android.ui.activity.main.authentication.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_targetPointsActivity"
+            app:destination="@id/targetPointsActivity"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/signInFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/slide_down"
+            app:popUpTo="@id/signInFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+</navigation>

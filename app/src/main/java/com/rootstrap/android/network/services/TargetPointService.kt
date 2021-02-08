@@ -20,4 +20,7 @@ object TargetPointService : ITargetPointService {
 
     override suspend fun getTargets(): Result<Data<TargetsSerializer>> =
         ActionCallback.call(service.getTargets())
+
+    override suspend fun deleteTarget(id: Long): Result<Data<Void>> =
+        ActionCallback.call(service.deleteTarget(id))
 }

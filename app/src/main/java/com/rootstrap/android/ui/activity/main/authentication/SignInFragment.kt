@@ -2,7 +2,11 @@ package com.rootstrap.android.ui.activity.main.authentication
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -10,44 +14,46 @@ import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.rootstrap.android.R
-import com.rootstrap.android.databinding.ActivitySignInBinding
-import com.rootstrap.android.metrics.Analytics
-import com.rootstrap.android.metrics.PageEvents
-import com.rootstrap.android.metrics.VISIT_SIGN_IN
+import com.rootstrap.android.databinding.FragmentSignInBinding
 import com.rootstrap.android.network.models.User
-import com.rootstrap.android.ui.activity.main.targetpoint.TargetPointsActivity
+import com.rootstrap.android.ui.base.BaseFragment
 import com.rootstrap.android.ui.view.AuthView
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.ViewModelListener
 import com.rootstrap.android.util.extensions.value
-import com.rootstrap.android.util.permissions.PermissionActivity
 
-class SignInActivity : PermissionActivity(), AuthView {
+class SignInFragment : BaseFragment(), AuthView {
 
     private lateinit var viewModel: SignInActivityViewModel
 
-    private lateinit var binding: ActivitySignInBinding
+    private lateinit var binding: FragmentSignInBinding
 
     private lateinit var faceBookCallbackManager: CallbackManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySignInBinding.inflate(layoutInflater)
+        arguments?.let {}
+    }
 
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSignInBinding.inflate(layoutInflater, container, false)
 
-        Analytics.track(PageEvents.visit(VISIT_SIGN_IN))
+        initView()
 
         val factory = SignInActivityViewModelFactory(viewModelListener)
 
-        viewModel = ViewModelProvider(this, factory)
+        viewModel = ViewModelProvider(requireActivity(), factory)
             .get(SignInActivityViewModel::class.java)
 
         logInCallbackFacebook()
 
-        initView()
-
         lifecycle.addObserver(viewModel)
+
+        return binding.root
     }
 
     private fun initView() {
@@ -57,11 +63,7 @@ class SignInActivity : PermissionActivity(), AuthView {
     }
 
     override fun showMainPage() {
-        startActivityClearTask(TargetPointsActivity())
-    }
-
-    private fun logInWithFacebook() {
-        LoginManager.getInstance().logIn(this, arrayListOf(FACEBOOK_PERMISSION))
+        binding.root.findNavController().navigate(R.id.targetPointsActivity)
     }
 
     private fun logInCallbackFacebook() {
@@ -92,8 +94,12 @@ class SignInActivity : PermissionActivity(), AuthView {
         }
     }
 
+    private fun logInWithFacebook() {
+        LoginManager.getInstance().logIn(this, arrayListOf(FACEBOOK_PERMISSION))
+    }
+
     private fun goToSignUp() {
-        startActivity(Intent(this, SignUpActivity::class.java))
+        binding.root.findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
     }
 
     private fun signIn() {

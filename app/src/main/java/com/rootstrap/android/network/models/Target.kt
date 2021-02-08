@@ -9,7 +9,8 @@ data class Target(
     @Json(name = "lat") val lat: Double = 0.0,
     @Json(name = "lng") val lng: Double = 0.0,
     @Json(name = "radius") val radius: Double = 0.0,
-    @Json(name = "topic_id") val topic_id: Int = 0
+    @Json(name = "topic_id") val topic_id: Int = 0,
+    @Json(name = "id") val id: Long = 0
 )
 
 data class TargetPointSerializer(@Json(name = "target") val target: Target)
@@ -22,6 +23,7 @@ fun Target.mapToModel(topic: TopicModel?): TargetModel {
         lat = lat,
         lng = lng,
         radius = radius,
-        topic = topic
+        topic = topic,
+        id = id
     )
 }
