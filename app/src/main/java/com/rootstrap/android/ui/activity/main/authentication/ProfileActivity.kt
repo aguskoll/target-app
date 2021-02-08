@@ -35,7 +35,7 @@ class ProfileActivity : BaseActivity(), ProfileView {
     }
 
     override fun goToFirstScreen() {
-        startActivityClearTask(AuthenticationActivity())
+        startActivityClearTask(SignInActivity())
     }
 
     // ViewModelListener
